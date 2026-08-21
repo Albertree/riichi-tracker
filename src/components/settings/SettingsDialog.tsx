@@ -38,7 +38,7 @@ export default function SettingsDialog({
   }
 
   return (
-    <CustomDialog title="Settings" onClose={onClose}>
+    <CustomDialog title={t("home.settings")} onClose={onClose}>
       <div className="flex flex-col items-center justify-center gap-y-8">
         <div className="flex flex-col items-center justify-center gap-y-2">
           <SettingRow

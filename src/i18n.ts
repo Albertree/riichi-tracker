@@ -11,7 +11,16 @@ void i18n
     backend: {
       loadPath: `${import.meta.env.BASE_URL}locales/{{lng}}/{{ns}}.json`,
     },
-    fallbackLng: "en",
+    supportedLngs: ["ko", "en", "weeb", "ja"],
+    // Without this, a ko-KR browser asks for locales/ko-KR/translation.json.
+    load: "languageOnly",
+    // No navigator lookup, so an unset preference lands on the fallback below.
+    detection: {
+      order: ["querystring", "localStorage"],
+      lookupLocalStorage: "language",
+      caches: ["localStorage"],
+    },
+    fallbackLng: "ko",
     returnEmptyString: false,
     interpolation: {
       escapeValue: false,

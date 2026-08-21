@@ -1,0 +1,680 @@
+{
+  "calc": {
+    "addDoraIndicator": "도라 표시패 추가",
+    "addUradoraIndicator": "뒷도라 표시패 추가",
+    "doraIndicators": "도라 <Sm>표시패</Sm>",
+    "error": {
+      "gameDoesNotExist": "오류: 게임 {{id}}이(가) 존재하지 않습니다.",
+      "settingsIdDoesNotExist": "오류: 설정 {{id}}이(가) 존재하지 않습니다."
+    },
+    "extraDora": "도라 ({{extraDoraHan}})",
+    "extraYaku": "역 ({{extraYakuHan}})",
+    "extraYakuman": "역만 ({{extraYakuman}})",
+    "fromAll": "모두에게서 <H>{{points}}</H>",
+    "fromBoth": "양쪽에서 <H>{{points}}</H>",
+    "fromLiable": "책임자에게서 <H>{{points}}</H>",
+    "fuReference": {
+      "$": "부 계산 참고",
+      "fu": {
+        "base": "기본 <H>20</H>부.",
+        "closedRon": "멘젠 론으로 화료 시 <H>+10</H>부.",
+        "ifNonSimple": "요구패면 <H>×2</H>.",
+        "ifOpen": "후로했으면 <H>÷2</H>.",
+        "openPinfu": "후로한 손패가 20부일 때 화료하면 <H>+2</H>부.",
+        "perKan": "깡 하나당 <H>+16</H>부:",
+        "perTriplet": "커쯔 하나당 <H>+4</H>부:",
+        "sevenPairs": "치또이츠는 항상 <H>25</H>부이며 올림하지 않습니다.",
+        "singleWait": "패 하나를 기다리는 대기로 화료 시 <H>+2</H>부.",
+        "tsumo": "핑후가 아닌 쯔모로 화료 시 <H>+2</H>부.",
+        "tsumoNoRinshanFu": "핑후나 영상개화가 아닌 쯔모로 화료 시 <H>+2</H>부.",
+        "yakuhaiPair": "역패 머리마다 <H>+2</H>부, 연풍패면 추가로 <H>+2</H>부.",
+        "yakuhaiPairNoDouble": "역패 머리마다 <H>+2</H>부."
+      },
+      "roundUp": "10 단위로 올림합니다."
+    },
+    "kita": "북빼기 ({{nukidora}})",
+    "notEnoughTiles": "패가 부족해 완성된 손패를 만들 수 없습니다.",
+    "noYaku": "역 없음",
+    "pattern": {
+      "base": "기본 <H>{{fu}}</H>부.",
+      "chiitoi": "치또이츠 기본 <H>{{fu}}</H>부.",
+      "closedRon": "멘젠 론으로 <H>+{{fu}}</H>부.",
+      "openPinfu": "후로한 손패가 20부라서 <H>+{{fu}}</H>부.",
+      "pinfuTsumo": "핑후 쯔모로 <H>+{{fu}}</H>부.",
+      "quad": {
+        "closed": "안깡으로 <H>+{{fu}}</H>부.",
+        "closedYaochuu": "요구패 안깡으로 <H>+{{fu}}</H>부.",
+        "open": "밍깡으로 <H>+{{fu}}</H>부.",
+        "openYaochuu": "요구패 밍깡으로 <H>+{{fu}}</H>부."
+      },
+      "rinshanTsumo": "영상개화 쯔모로 <H>+{{fu}}</H>부.",
+      "triplet": {
+        "closed": "안커로 <H>+{{fu}}</H>부.",
+        "closedYaochuu": "요구패 안커로 <H>+{{fu}}</H>부.",
+        "open": "밍커로 <H>+{{fu}}</H>부.",
+        "openYaochuu": "요구패 밍커로 <H>+{{fu}}</H>부."
+      },
+      "tsumo": "쯔모로 <H>+{{fu}}</H>부.",
+      "wait": {
+        "kanchan": "간짱대기로 화료해 <H>+{{fu}}</H>부.",
+        "penchan": "변짱대기로 화료해 <H>+{{fu}}</H>부.",
+        "ryanmen": "양면대기로 화료해 <H>+{{fu}}</H>부.",
+        "shanpon": "쌍봉대기로 화료해 <H>+{{fu}}</H>부.",
+        "tanki": "단기대기로 화료해 <H>+{{fu}}</H>부."
+      },
+      "yakuhaiPair": {
+        "double": "연풍패 머리로 <H>+{{fu}}</H>부.",
+        "single": "역패 머리로 <H>+{{fu}}</H>부."
+      }
+    },
+    "points": "점수",
+    "pointsCalculator": "점수 이동 계산기",
+    "pointsToTake": "가져갈 점수",
+    "round": "장풍",
+    "scoreCalculator": "점수 계산기",
+    "seat": "자풍",
+    "selectFu": "부수 선택",
+    "selectHan": "판수 선택",
+    "tilesNotValid": "이 패로는 화료형이 되지 않습니다.",
+    "transferCalculatedScore": "계산된 점수 이동",
+    "transferPoints": "점수 이동",
+    "uradoraIndicators": "뒷도라 <Sm>표시패</Sm>"
+  },
+  "common": {
+    "baiman": "배만",
+    "chii": "치",
+    "clear": "지우기",
+    "close": "닫기",
+    "closedKan": "안깡",
+    "continue": "이어하기",
+    "dark": "어둡게",
+    "east": "동",
+    "fu": "부",
+    "fuvalue": "<H>{{fu}}</H>부",
+    "green": "발",
+    "han": "판",
+    "haneman": "하네만",
+    "hanfuvalue": "<H>{{han}}</H>판 <H>{{fu}}</H>부",
+    "hanvalue": "<H>{{han}}</H>판",
+    "kan": "깡",
+    "kazoeyakuman": "헤아림역만",
+    "light": "밝게",
+    "mangan": "만관",
+    "north": "북",
+    "pon": "펑",
+    "red": "중",
+    "ron": "론",
+    "sanbaiman": "삼배만",
+    "south": "남",
+    "start": "시작",
+    "submit": "확인",
+    "tsumo": "쯔모",
+    "west": "서",
+    "white": "백",
+    "yakuman": {
+      "1": "역만",
+      "2": "더블 역만",
+      "3": "트리플 역만",
+      "4": "4배 역만",
+      "5": "5배 역만",
+      "6": "6배 역만",
+      "over": "{{value}}배 역만"
+    }
+  },
+  "compass": {
+    "abort": "도중유국",
+    "calculateHand": "손패 계산",
+    "chombo": "촘보",
+    "dealerRepeat": "연장",
+    "dealtinPlayer": "방총한 사람",
+    "drawType": "유국 종류",
+    "editScore": "점수 수정",
+    "exhaust": "황패유국",
+    "gameIdDoesNotExist": "오류: 게임 {{id}}이(가) 존재하지 않습니다.",
+    "handleDraws": "유국 처리",
+    "otherActions": "기타 동작",
+    "pao": "파오",
+    "paysOutReverseMangan": "<H>역만관</H>을 지불합니다.",
+    "playerInViolation": "반칙한 사람",
+    "pointDistribution": "점수 분배",
+    "readyPlayers": "텐파이한 사람",
+    "redoesTheRound": "이번 국을 처음부터 다시 진행합니다.",
+    "repeatRound": "같은 국 반복",
+    "repeats": "본장 ({{repeats}})",
+    "responsiblePlayer": "책임자",
+    "riichi": "리치",
+    "riichiSticks": "리치봉 ({{riichiSticks}})",
+    "rotateSeats": "자리 돌리기",
+    "scoreRepeatSticks": "본장봉 정산",
+    "scoreRiichiSticks": "리치봉 정산",
+    "seatRotation": "자리 이동",
+    "transferPoints": "점수 이동"
+  },
+  "home": {
+    "calculator": "계산기",
+    "fourwayCompass": "4인 나침반",
+    "help": {
+      "addRiichiSticks": "<H>리치</H> 버튼을 눌러 리치봉을 추가하세요.",
+      "createCompass": "<H>새 게임</H> 버튼으로 <H>나침반</H>을 만드세요.",
+      "drawsAndRepeats": "<H>가운데 풍패</H>를 눌러 유국과 본장을 처리하세요.",
+      "howToInput": "초보자는 손패를 그대로 입력하고, 숙련자는 판과 부를 바로 넣을 수 있습니다.<br /><H>계산기 오른쪽 위</H>에서 전환합니다.<br />기본 입력 방식은 <H>판·부 입력 우선</H> 옵션으로 정합니다.",
+      "manuallyEditRounds": "<H>톱니바퀴 버튼</H>을 눌러 자리, 국, 점봉을 직접 고칠 수 있습니다.",
+      "manuallyEditScores": "<H>플레이어의 점수 표시</H>를 눌러 점수를 직접 고칠 수 있습니다.",
+      "placePhone": "휴대폰을 탁자 가운데에 두고 즐기세요!",
+      "transferScores": "<H>화료한 사람의 풍패</H>를 누르고 <H>계산기</H>로 점수를 이동하세요.",
+      "useCalculator": "게임 없이 <H>계산기</H>만 따로 쓸 수도 있습니다.",
+      "useReference": "<H>참고 자료</H>에서 패와 역, 점수표를 익히세요."
+    },
+    "initialScore": "시작 점수",
+    "keepTrackOfYourGames": "게임 기록을 관리하세요!",
+    "newGame": "새 게임",
+    "preferences": "환경 설정",
+    "preferHanAndFuInput": "판·부 입력 우선",
+    "reference": "참고 자료",
+    "riichiTracker": "Riichi Tracker",
+    "settings": "설정",
+    "yourSeatWind": "내 자풍"
+  },
+  "reference": {
+    "bamboo": "삭수",
+    "canBeRounded": "룰에 따라 <H>3</H>판 <H>60</H>부와 <H>4</H>판 <H>30</H>부를 <H>만관</H>으로 올릴 수 있습니다.",
+    "characters": "만수",
+    "circles": "통수",
+    "closedOnly": "멘젠 한정",
+    "dealer": "친",
+    "dealerRon": "친 론",
+    "dealerTsumo": "친 쯔모",
+    "dragons": "삼원패",
+    "easy": "기본",
+    "formula": {
+      "baimanBasicPoints": "<H>8~10</H>판 = <H>배만</H>, 기본점 4000점.",
+      "calculateBasicPoints": "<Mono>부×2<Sup>2+판</Sup></Mono>으로 기본점을 구합니다.",
+      "common20": "후로한 손패 대부분, 멘젠 쯔모 대부분, 핑후 론은 <H>30부</H>입니다.",
+      "common30": "멘젠 론 대부분과 후로한 또이또이 대부분은 <H>40부</H>입니다.",
+      "common40": "핑후 쯔모는 <H>20부</H>입니다.",
+      "commonFuValues": "자주 나오는 부수:",
+      "countFuValue": "손패 구성으로 부수를 구하고 10 단위로 올림합니다:",
+      "countHanValue": "역과 도라를 세어 판수를 구합니다.",
+      "dealerRon": "친 론: 방총한 사람에게서 <H>6배</H>.",
+      "dealerTsumo": "친 쯔모: 나머지 모두에게서 <H>2배</H>씩.",
+      "fu": {
+        "base": "기본 <H>20</H>부.",
+        "closedRon": "멘젠 론으로 화료 시 <H>+10</H>부.",
+        "ifNonSimple": "요구패면 <H>×2</H>.",
+        "ifOpen": "후로했으면 <H>÷2</H>.",
+        "openPinfu": "후로한 손패가 20부일 때 화료하면 <H>+2</H>부.",
+        "perKan": "깡 하나당 <H>+16</H>부:",
+        "perTriplet": "커쯔 하나당 <H>+4</H>부:",
+        "sevenPairs": "치또이츠는 항상 <H>25</H>부이며 올림하지 않습니다.",
+        "singleWait": "패 하나를 기다리는 대기로 화료 시 <H>+2</H>부.",
+        "tsumo": "핑후가 아닌 쯔모로 화료 시 <H>+2</H>부 (룰에 따라 영상개화 쯔모는 <H>0</H>부로 치기도 합니다).",
+        "yakuhaiPair": "역패 머리마다 <H>+2</H>부 (룰에 따라 연풍패 머리는 <H>+4</H>부이기도 합니다)."
+      },
+      "hanemanBasicPoints": "<H>6~7</H>판 = <H>하네만</H>, 기본점 3000점.",
+      "ifBasicPointsAboveMangan": "기본점이 2000점을 넘어도 <H>4</H>판 이하면 <H>만관</H> 2000점으로 고정합니다.",
+      "ifKiriageMangan": "잘라올림 만관 룰을 쓰면 기본점 1920점을 2000점으로 올립니다.",
+      "ifManganSkip": "<H>5</H>판 이상이면 부를 셀 필요가 없으니 8단계로 건너뜁니다:",
+      "ifYakumanSkip": "<H>역만</H>이면 <H>역만</H>당 기본점 8000점입니다. 8단계로 건너뜁니다.",
+      "manganBasicPoints": "<H>5</H>판 = <H>만관</H>, 기본점 2000점.",
+      "nonDealerRon": "자 론: 방총한 사람에게서 <H>4배</H>.",
+      "nonDealerTsumo": "자 쯔모: 다른 자에게서 <H>1배</H>씩, 친에게서 <H>2배</H>.",
+      "sanbaimanBasicPoints": "<H>11~12</H>판 = <H>삼배만</H>, 기본점 6000점.",
+      "theGeneralFormula": "전체 계산식은 다음과 같습니다:",
+      "transferOnWin": "화료하면 기본점을 100 단위로 올림해 주고받습니다:",
+      "yakumanBasicPoints": "<H>13</H>판 이상 = <H>역만</H>, 기본점 8000점."
+    },
+    "gameMode": {
+      "$": "게임 방식",
+      "fourPlayer": "4인",
+      "threePlayer": "3인"
+    },
+    "hideYakuman": "역만 숨기기",
+    "legend": "범례",
+    "local": "로컬",
+    "minusIfOpen": "후로 시 -1",
+    "nonDealer": "자",
+    "nonDealerRon": "자 론",
+    "nonDealerTsumo": "자 쯔모",
+    "notYaku": "역 아님",
+    "onlyEasy": "기본만",
+    "reference": "참고 자료",
+    "scoringTable": "점수표",
+    "scoringTableSanma": "3인 마작의 점수표는 북쪽 분할을 쓰지 않는 한 4인과 같습니다. 북쪽 분할을 쓰면 북가에서 잃었을 점수를 나머지에게 다시 나눕니다.",
+    "showLocal": "로컬역 보기",
+    "tiles": "패",
+    "tsumoPoints": {
+      "$": "쯔모 점수",
+      "bisection": "분할",
+      "loss": "손실"
+    },
+    "winds": "바람패",
+    "winloss": "화료/방총",
+    "yakuList": "역 목록"
+  },
+  "settings": {
+    "affectsTheCompass": "나침반에 적용됩니다",
+    "afterKanFu": {
+      "$": "영상개화 부",
+      "help": "영상개화로 화료했을 때 쯔모 <B><H>2</H>부</B>를 셀지 여부입니다.",
+      "twoFu": "2부",
+      "zeroFu": "0부"
+    },
+    "allGreensDragon": {
+      "$": "녹일색의 발",
+      "help": "녹일색을 인정할 때 발(發)을 반드시 포함해야 하는지 여부입니다.",
+      "optional": "선택",
+      "required": "필수"
+    },
+    "brightTiles": {
+      "$": "밝은 패",
+      "help": "다크 테마에서도 밝은 테마의 패 그림을 쓸지 여부입니다."
+    },
+    "common": {
+      "allow": "허용",
+      "disable": "끄기",
+      "disallow": "불허",
+      "enable": "켜기",
+      "hide": "숨기기",
+      "show": "보이기"
+    },
+    "copyFromCalculator": "계산기 설정 가져오기",
+    "countedYakuman": {
+      "$": "헤아림역만",
+      "help": "<H>13</H>판 이상인 손패를 <B>역만</B>으로 칠지 <B>삼배만</B>으로 칠지 정합니다.",
+      "sanbaiman": "삼배만",
+      "yakuman": "역만"
+    },
+    "doubleWindFu": {
+      "$": "연풍패 부",
+      "fourFu": "4부",
+      "help": "장풍이면서 자풍이기도 한 연풍패 머리를 <B><H>4</H>부</B>로 칠지 <B><H>2</H>부</B>로 칠지 정합니다.",
+      "twoFu": "2부"
+    },
+    "doubleYakuman": {
+      "$": "더블 역만",
+      "help": "특정 역을 <H>더블 역만</H>으로 칠지 여부입니다.<br />해당하는 역:"
+    },
+    "gameMode": {
+      "$": "게임 방식",
+      "fourPlayer": "4인",
+      "help": "게임에 참가하는 인원수입니다.<br /><B>3인</B> 마작은 산마 룰을 쓰며, 치 불가, 만수 2~8 제외, 북빼기가 포함됩니다.",
+      "threePlayer": "3인"
+    },
+    "language": {
+      "$": "언어",
+      "help": "화면에 표시할 언어입니다."
+    },
+    "northTiles": {
+      "$": "북 패",
+      "help": "3인 마작에서 북 패는 <B>북빼기</B>로 처리하거나, 자풍과 상관없이 <B>역패</B>로 쓸 수 있습니다. <B>북빼기</B>를 쓰면 뽑아낸 북 패를 세는 카운터가 생깁니다.",
+      "kita": "북빼기",
+      "yakuhai": "역패"
+    },
+    "noYakuDora": {
+      "$": "역 없을 때 도라",
+      "help": "역이 없어도 도라를 계산할지 여부입니다."
+    },
+    "noYakuFu": {
+      "$": "역 없을 때 부",
+      "help": "역이 없어도 부를 계산할지 여부입니다. 이 경우 손패는 <H>0</H>판이 됩니다."
+    },
+    "openAllSimples": {
+      "$": "쿠이탕",
+      "help": "후로한 손패에도 탕야오를 인정할지 여부입니다."
+    },
+    "otherScoring": {
+      "$": "추가 점수 입력",
+      "help": "추가 역의 판수, 도라, 역만을 직접 더할 수 있는 카운터를 보일지 여부입니다.<br />적도라를 더 넣거나, 다른 도라, 지원하지 않는 로컬역을 넣을 때 씁니다."
+    },
+    "paoPayment": {
+      "$": "파오 지불",
+      "help": "파오로 점수를 나눠 낼 수 있게 할지 여부입니다.<br /><H>역만</H>이 만들어지도록 도와준 사람이 있을 때 씁니다.<br />쯔모면 책임자가 전액을 냅니다.<br />론이면 책임자와 방총한 사람이 절반씩 냅니다."
+    },
+    "redFives": {
+      "$": "적도라",
+      "disable": "적도라 없음",
+      "enable": "적도라 {{fives}}장",
+      "help": "계산기에서 손패를 만들 때 쓸 수 있는 적도라 장수입니다."
+    },
+    "roundedMangan": {
+      "$": "잘라올림 만관",
+      "help": "<H>4</H>판 <H>30</H>부나 <H>3</H>판 <H>60</H>부를 <H>만관</H>으로 올릴지 여부입니다.<br />올리지 않으면 원래대로 2000/3900점과 7700점(자), 3900점과 11600점(친)이 됩니다.",
+      "noRounding": "올림 안 함",
+      "rounded": "올림"
+    },
+    "showTileNames": {
+      "$": "패 이름 표시",
+      "help": "패 모서리에 패 이름 약자를 표시할지 여부입니다."
+    },
+    "theme": {
+      "$": "테마",
+      "help": "화면 색 테마입니다. 지금 선택된 테마를 다시 누르면 시스템 설정을 따릅니다."
+    },
+    "toggleAll": "전체 전환",
+    "toggleLocalYaku": "로컬역 전환",
+    "toggleYaku": {
+      "$": "역 켜고 끄기",
+      "help": "계산기에서 쓸 역을 켜거나 끕니다.<br /><B>선택 역</B>은 흔히 쓰는 역이라 기본으로 켜져 있고, 필요하면 끌 수 있습니다.<br /><B>로컬역</B>은 대체로 드물어서 기본으로 꺼져 있습니다.",
+      "local": "로컬역 (+{{length}})",
+      "optional": "선택 역 (-{{length}})"
+    },
+    "tsumoPoints": {
+      "$": "쯔모 점수",
+      "bisection": "분할",
+      "help": "쯔모로 화료했을 때 점수를 어떻게 나눌지 정합니다.<br /><B>손실</B>이면 기본점이 4인과 같습니다. 즉 화료한 사람이 빠진 북가 몫만큼 덜 받습니다. <B>분할</B>이면 북가가 냈어야 할 몫까지 기본점에 넣습니다. 즉 나머지 두 사람이 더 냅니다.",
+      "loss": "손실"
+    },
+    "yakumanStacking": {
+      "$": "역만 중첩",
+      "help": "여러 <H>역만</H>을 겹쳐 셀지, 아니면 최대 <H>역만</H> 하나로 제한할지 정합니다.<br />이 옵션을 끄면 <H>더블 역만</H>도 함께 꺼집니다."
+    }
+  },
+  "yaku": {
+    "akadora": {
+      "$": "적도라",
+      "help": ""
+    },
+    "bakazeEast": {
+      "$": "장풍패 (동)",
+      "help": ""
+    },
+    "bakazeNorth": {
+      "$": "장풍패 (북)",
+      "help": ""
+    },
+    "bakazeSouth": {
+      "$": "장풍패 (남)",
+      "help": ""
+    },
+    "bakazeWest": {
+      "$": "장풍패 (서)",
+      "help": ""
+    },
+    "benikujaku": {
+      "$": "홍공작",
+      "help": "붉은 삭수(1, 5, 7, 9)와 중(中)만으로 이루어진 손패."
+    },
+    "chankan": {
+      "$": "창깡",
+      "help": "다른 사람이 펑을 깡으로 올리는 패를 가로채 화료."
+    },
+    "chiihou": {
+      "$": "지화",
+      "help": "자가 첫 쯔모로 화료. 후로가 있으면 무효입니다."
+    },
+    "chiitoitsu": {
+      "$": "치또이츠",
+      "help": "서로 다른 일곱 쌍으로 이루어진 손패. 멘쯔 네 개와 머리라는 일반 화료형의 예외입니다."
+    },
+    "chiniisou": {
+      "$": "청일색",
+      "help": "한 종류의 수패만으로 이루어진 손패."
+    },
+    "chinroutou": {
+      "$": "청노두",
+      "help": "노두패만으로 이루어진 손패."
+    },
+    "chun": {
+      "$": "중",
+      "help": ""
+    },
+    "chuurenpoutou": {
+      "$": "구련보등",
+      "help": "같은 종류의 <B>1112345678999</B>에 같은 종류의 패 한 장을 더한 손패."
+    },
+    "daichiishin": {
+      "$": "대칠성",
+      "help": "자패 일곱 종류가 모두 들어간 치또이츠. 자일색과 겹쳐 세지 않습니다."
+    },
+    "daichikurin": {
+      "$": "대죽림",
+      "help": "삭수 2~8로 이루어진 치또이츠."
+    },
+    "daisangen": {
+      "$": "대삼원",
+      "help": "삼원패 세 종류를 모두 멘쯔로 갖춘 손패."
+    },
+    "daisharin": {
+      "$": "대차륜",
+      "help": "통수 2~8로 이루어진 치또이츠."
+    },
+    "daisuurin": {
+      "$": "대수린",
+      "help": "만수 2~8로 이루어진 치또이츠."
+    },
+    "daisuushii": {
+      "$": "대사희",
+      "help": "풍패 네 종류를 모두 멘쯔로 갖춘 손패."
+    },
+    "dora": {
+      "$": "도라",
+      "help": ""
+    },
+    "doubleriichi": {
+      "$": "더블리치",
+      "help": "첫 순에 텐파이라면 1000점을 걸고 리치를 선언. 후로가 있으면 무효입니다. 이후 손패를 바꿀 수 없고, 뽑은 패는 화료패가 아닌 한 버립니다."
+    },
+    "haiteiraoyue": {
+      "$": "해저로월",
+      "help": "패산의 마지막 패를 쯔모해 화료."
+    },
+    "haku": {
+      "$": "백",
+      "help": ""
+    },
+    "hatsu": {
+      "$": "발",
+      "help": ""
+    },
+    "honchantaiyaochuu": {
+      "$": "챤타",
+      "help": "손패의 모든 멘쯔와 머리에 노두패나 자패가 들어 있음."
+    },
+    "honiisou": {
+      "$": "혼일색",
+      "help": "한 종류의 수패와 자패만으로 이루어진 손패."
+    },
+    "honroutou": {
+      "$": "혼노두",
+      "help": "노두패와 자패만으로 이루어진 손패."
+    },
+    "houteiraoyui": {
+      "$": "하저로어",
+      "help": "마지막으로 버려진 패로 화료."
+    },
+    "hyakumangoku": {
+      "$": "백만석",
+      "help": "만수 청일색이면서 패의 숫자 합이 100 이상인 손패."
+    },
+    "iipeikou": {
+      "$": "이페코",
+      "help": "같은 슌쯔가 두 벌 있는 손패."
+    },
+    "ikkitsuukan": {
+      "$": "일기통관",
+      "help": "한 종류 안에서 <B>123</B>, <B>456</B>, <B>789</B>를 모두 갖춘 손패."
+    },
+    "ippatsu": {
+      "$": "일발",
+      "help": "리치 후 다음 버림패를 내기 전에 화료하면 <H>1</H>판 추가. 후로가 있으면 무효입니다."
+    },
+    "isshokusanjun": {
+      "$": "일색삼순",
+      "help": "같은 종류의 같은 슌쯔가 세 벌 있는 손패."
+    },
+    "jikazeEast": {
+      "$": "자풍패 (동)",
+      "help": ""
+    },
+    "jikazeNorth": {
+      "$": "자풍패 (북)",
+      "help": ""
+    },
+    "jikazeSouth": {
+      "$": "자풍패 (남)",
+      "help": ""
+    },
+    "jikazeWest": {
+      "$": "자풍패 (서)",
+      "help": ""
+    },
+    "junchantaiyaochuu": {
+      "$": "준챤",
+      "help": "손패의 모든 멘쯔와 머리에 노두패가 들어 있음."
+    },
+    "junseichuurenpoutou": {
+      "$": "순정구련보등",
+      "help": "구련보등을 9면대기로 화료. 즉 텐파이 상태의 손패가 정확히 <B>1112345678999</B>인 경우입니다."
+    },
+    "kita": {
+      "$": "북빼기",
+      "help": ""
+    },
+    "kokuiisou": {
+      "$": "흑일색",
+      "help": "검은 통수(2, 4, 8)와 풍패만으로 이루어진 손패."
+    },
+    "kokushimusou": {
+      "$": "국사무쌍",
+      "help": "서로 다른 노두패와 자패 열세 종류에 그중 한 장을 더한 손패. 룰에 따라 화료패의 안깡에 론을 인정하기도 합니다."
+    },
+    "kokushimusoujuusanmenmachi": {
+      "$": "국사무쌍 13면대기",
+      "help": "국사무쌍을 13면대기로 화료. 즉 텐파이 상태에서 이미 노두패와 자패를 한 장씩 모두 갖춘 경우입니다."
+    },
+    "menzenchintsumohou": {
+      "$": "멘젠쯔모",
+      "help": "멘젠 상태로 쯔모해 화료."
+    },
+    "otakazeNorth": {
+      "$": "객풍패 (북)",
+      "help": ""
+    },
+    "other": {
+      "dora": {
+        "$": "도라",
+        "help": "매 국 시작에 도라 표시패를 한 장 뒤집어 도라를 정합니다. 깡을 할 때마다 표시패가 한 장씩 더 열리고, 리치로 화료하면 그 아래의 뒷도라 표시패가 공개됩니다.<br />적도라도 도라입니다. 손패에 있는 도라 한 장마다 <H>1</H>판입니다.<br />풍패는 동 → 남 → 서 → 북 → 동 순으로 넘어갑니다.<br />삼원패는 백 → 발 → 중 → 백 순으로 넘어갑니다."
+      },
+      "kazehai": {
+        "$": "역패 (바람패)",
+        "help": "장풍패나 자풍패입니다. 멘쯔 하나마다 <H>1</H>판을 얻습니다. 장풍이면서 자풍이면 <H>2</H>판입니다."
+      },
+      "kita": {
+        "$": "북빼기",
+        "help": "3인 마작에서 빼놓은 북 패는 도라로 셉니다. 룰에 따라 북을 모든 사람에게 역패로 인정하기도 합니다."
+      },
+      "nagashimangan": {
+        "$": "유국만관",
+        "help": "황패유국 시 자기 버림패가 모두 노두패와 자패이고 아무도 그 패를 부르지 않았다면 <H>만관</H>을 받습니다. 룰에 따라 <H>만관</H>, <H>5</H>판 등으로 처리합니다."
+      },
+      "sangenpai": {
+        "$": "역패 (삼원패)",
+        "help": "백, 발, 중 중 하나입니다. 멘쯔 하나마다 <H>1</H>판을 얻습니다."
+      }
+    },
+    "otherDora": {
+      "$": "기타 도라",
+      "help": ""
+    },
+    "otherYaku": {
+      "$": "기타 역",
+      "help": ""
+    },
+    "otherYakuman": {
+      "$": "기타 역만",
+      "help": ""
+    },
+    "pinfu": {
+      "$": "핑후",
+      "help": "구성상 부가 <H>0</H>인 손패. 즉 슌쯔만 있고, 머리가 역패(삼원패나 장풍·자풍)가 아니며, 양면대기로 화료한 경우입니다."
+    },
+    "renhou": {
+      "$": "인화",
+      "help": "첫 순이 돌아오기 전에 론으로 화료. 후로가 있으면 무효입니다."
+    },
+    "riichi": {
+      "$": "리치",
+      "help": "텐파이(화료까지 한 장 남은 상태)라면 1000점을 걸고 리치를 선언. 이후 손패를 바꿀 수 없고, 뽑은 패는 화료패가 아닌 한 버립니다."
+    },
+    "rinshankaihou": {
+      "$": "영상개화",
+      "help": "깡을 한 뒤 왕패에서 뽑은 패로 화료. 3인 마작에서는 북빼기 후 왕패에서 뽑은 패로 화료해도 인정됩니다."
+    },
+    "ryanpeikou": {
+      "$": "량페코",
+      "help": "같은 슌쯔 두 벌짜리가 서로 다른 조합으로 두 번 있는 손패. 치또이츠와 겹쳐 세지 않습니다."
+    },
+    "ryuuiisou": {
+      "$": "녹일색",
+      "help": "녹색 삭수(2, 3, 4, 6, 8)와 발(發)만으로 이루어진 손패. 룰에 따라 발을 반드시 포함해야 하기도 합니다."
+    },
+    "sanankou": {
+      "$": "삼안커",
+      "help": "안커가 세 벌 있는 손패(펑, 밍깡, 론으로 완성한 것은 제외). 나머지 멘쯔는 후로해도 됩니다."
+    },
+    "sankantsu": {
+      "$": "삼깡즈",
+      "help": "깡이 세 번 들어간 손패."
+    },
+    "sanrenkou": {
+      "$": "삼련각",
+      "help": "같은 종류에서 숫자가 하나씩 이어지는 커쯔가 세 벌 있는 손패."
+    },
+    "sanshokudoujun": {
+      "$": "삼색동순",
+      "help": "세 종류에서 같은 숫자의 슌쯔를 모두 갖춘 손패."
+    },
+    "sanshokudoukou": {
+      "$": "삼색동각",
+      "help": "세 종류에서 같은 숫자의 커쯔를 모두 갖춘 손패."
+    },
+    "shiiaruraotai": {
+      "$": "십이낙태",
+      "help": "후로한 멘쯔 네 벌(안깡 제외)로 마지막 한 장을 기다리는 손패. 쯔모와 론 모두 인정됩니다."
+    },
+    "shousangen": {
+      "$": "소삼원",
+      "help": "삼원패 중 두 종류가 멘쯔이고 나머지 한 종류가 머리인 손패. 삼원패 커쯔 두 벌에서 나오는 <H>2</H>판도 그대로 더해집니다."
+    },
+    "shousuushii": {
+      "$": "소사희",
+      "help": "풍패 중 세 종류가 멘쯔이고 나머지 한 종류가 머리인 손패."
+    },
+    "suuankan": {
+      "$": "사깡즈",
+      "help": "깡이 네 번 들어간 손패."
+    },
+    "suuankou": {
+      "$": "사안커",
+      "help": "안커가 네 벌 있는 손패(펑, 밍깡, 론으로 완성한 것은 제외)."
+    },
+    "suuankoutankimachi": {
+      "$": "사안커 단기",
+      "help": "사안커를 단기대기로 화료(머리를 완성하는 형태라 론도 인정)."
+    },
+    "tanyaochuu": {
+      "$": "탕야오",
+      "help": "2~8의 중장패만으로 이루어진 손패. 룰에 따라 멘젠에서만 인정하기도 합니다."
+    },
+    "tenhou": {
+      "$": "천화",
+      "help": "친이 첫 쯔모로 화료. 후로가 있으면 무효입니다."
+    },
+    "toitoihou": {
+      "$": "또이또이",
+      "help": "커쯔와 깡쯔만으로 이루어진 손패."
+    },
+    "tsuuiisou": {
+      "$": "자일색",
+      "help": "자패만으로 이루어진 손패."
+    },
+    "uradora": {
+      "$": "뒷도라",
+      "help": ""
+    },
+    "uumensai": {
+      "$": "오문제",
+      "help": "만수, 통수, 삭수, 풍패, 삼원패 다섯 종류가 모두 들어간 손패."
+    }
+  }
+}

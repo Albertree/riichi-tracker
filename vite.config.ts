@@ -25,7 +25,7 @@ export default ({ mode }: { mode: string }) =>
           start_url: "/riichi-tracker/",
           display: "standalone",
           background_color: "#111827",
-          lang: "en",
+          lang: "ko",
           scope: "/riichi-tracker/",
           description: "Riichi Mahjong Game Tracker",
           theme_color: "#111827",

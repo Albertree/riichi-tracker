@@ -63,7 +63,16 @@ export default function PreferencesDialog({
             }
           >
             <Button
-              active={language === "en" || language == null}
+              active={language === "ko" || language == null}
+              onClick={() => {
+                setLanguage("ko");
+                void i18n.changeLanguage("ko");
+              }}
+            >
+              한국어
+            </Button>
+            <Button
+              active={language === "en"}
               onClick={() => {
                 setLanguage("en");
                 void i18n.changeLanguage("en");
@@ -80,7 +89,7 @@ export default function PreferencesDialog({
             >
               English (Japanese)
             </Button>
-            {/* <Button
+            <Button
               active={language === "ja"}
               onClick={() => {
                 setLanguage("ja");
@@ -88,7 +97,7 @@ export default function PreferencesDialog({
               }}
             >
               日本語
-            </Button> */}
+            </Button>
           </SettingRow>
           <SettingRow
             name={t("settings.showTileNames.$")}

@@ -665,7 +665,7 @@ function CalculatorWithGame({
                     )}
                     <div className="flex flex-col items-center justify-center gap-y-1">
                       <span className="text-xl">
-                        {game == null ? "Dealer" : "Seat"}
+                        {game == null ? t("reference.dealer") : t("calc.seat")}
                       </span>
                       <WindSelect
                         forced={locState.t === "transfer"}
