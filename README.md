@@ -1,7 +1,7 @@
 # Riichi Tracker
 
 > A personal fork of [1Computer1/riichi-tracker](https://github.com/1Computer1/riichi-tracker), licensed under AGPL-3.0-only.
-> Live at <https://albertree.github.io/riichi-tracker/>.
+> Live at <https://albertree.com/riichi-tracker/>.
 
 A riichi mahjong hand calculator and interactive compass.
 Also includes a reference for yaku and scoring.
@@ -36,3 +36,12 @@ Also includes a reference for yaku and scoring.
 - Tile reference
 - Yaku reference with examples and filters
 - Scoring table and scoring formula
+
+## Deploying
+
+```sh
+npm run deploy
+```
+
+Builds and force-pushes `dist/` to the `gh-pages` branch, which GitHub Pages
+serves at <https://albertree.com/riichi-tracker/>.
