@@ -8,6 +8,9 @@ void i18n
   .use(LanguageDetector)
   .use(initReactI18next)
   .init({
+    backend: {
+      loadPath: `${import.meta.env.BASE_URL}locales/{{lng}}/{{ns}}.json`,
+    },
     fallbackLng: "en",
     returnEmptyString: false,
     interpolation: {
