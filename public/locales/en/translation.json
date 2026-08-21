@@ -32,9 +32,15 @@
       },
       "roundUp": "Round up to the nearest 10."
     },
+    "jump": {
+      "fu": "符",
+      "points": "点",
+      "tiles": "牌",
+      "yaku": "役"
+    },
     "kita": "Kita ({{nukidora}})",
-    "notEnoughTiles": "Not enough tiles to form a complete hand.",
     "noYaku": "No Yaku",
+    "notEnoughTiles": "Not enough tiles to form a complete hand.",
     "pattern": {
       "base": "<H>{{fu}}</H> base fu.",
       "chiitoi": "<H>{{fu}}</H> base fu for Seven Pairs.",

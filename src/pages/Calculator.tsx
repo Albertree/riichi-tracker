@@ -607,17 +607,21 @@ function CalculatorWithGame({
         </div>
         {prefersQuick ? (
           <div className="invisible fixed right-2 bottom-2 z-10 flex flex-col gap-y-2 sm:visible lg:right-8 lg:bottom-4">
-            <JumpButton element={pointsCalculatorEl}>点</JumpButton>
-            <JumpButton element={fuReferenceEl}>符</JumpButton>
+            <JumpButton element={pointsCalculatorEl}>
+              {t("calc.jump.points")}
+            </JumpButton>
+            <JumpButton element={fuReferenceEl}>{t("calc.jump.fu")}</JumpButton>
           </div>
         ) : (
           <div className="invisible fixed right-2 bottom-2 z-10 flex flex-col gap-y-2 sm:visible lg:right-8 lg:bottom-4">
-            <JumpButton element={handBuilderEl}>牌</JumpButton>
+            <JumpButton element={handBuilderEl}>
+              {t("calc.jump.tiles")}
+            </JumpButton>
             <JumpButton
               element={scoreResultEl}
               highlight={scoreResult?.agari != null}
             >
-              役
+              {t("calc.jump.yaku")}
             </JumpButton>
           </div>
         )}

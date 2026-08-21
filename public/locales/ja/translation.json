@@ -32,9 +32,15 @@
       },
       "roundUp": "10の位に切り上げます。"
     },
+    "jump": {
+      "fu": "符",
+      "points": "点",
+      "tiles": "牌",
+      "yaku": "役"
+    },
     "kita": "北 ({{nukidora}})",
-    "notEnoughTiles": "牌が足りず、和了形になりません。",
     "noYaku": "役なし",
+    "notEnoughTiles": "牌が足りず、和了形になりません。",
     "pattern": {
       "base": "副底<H>{{fu}}</H>符。",
       "chiitoi": "七対子の基本<H>{{fu}}</H>符。",
