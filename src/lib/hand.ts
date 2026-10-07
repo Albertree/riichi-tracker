@@ -206,21 +206,48 @@ export function calculateHanFu(
   ronAsOya: number;
   ronAsKo: number;
 } {
-  let base = fu * Math.pow(2, han + 2);
-  if (settings.kiriageMangan ? base >= 1920 : base > 2000) {
-    if (settings.kazoeYakuman && han >= 13) {
-      base = 8000;
-    } else if (han >= 11) {
-      base = 6000;
-    } else if (han >= 8) {
-      base = 4000;
-    } else if (han >= 6) {
-      base = 3000;
-    } else {
-      base = 2000;
-    }
-  }
+  const limit = limitOf(han, fu, settings);
+  const base =
+    limit == null
+      ? fu * Math.pow(2, han + 2)
+      : {
+          mangan: 2000,
+          haneman: 3000,
+          baiman: 4000,
+          sanbaiman: 6000,
+          kazoeyakuman: 8000,
+        }[limit];
   return calculateScoreTable(base, settings);
+}
+
+export type Limit =
+  | "mangan"
+  | "haneman"
+  | "baiman"
+  | "sanbaiman"
+  | "kazoeyakuman";
+
+/** The limit a hand of this han and fu reaches, if any. */
+export function limitOf(
+  han: number,
+  fu: number,
+  settings: ScoreSettings,
+): Limit | null {
+  const base = fu * Math.pow(2, han + 2);
+  if (!(settings.kiriageMangan ? base >= 1920 : base > 2000)) {
+    return null;
+  }
+  if (settings.kazoeYakuman && han >= 13) {
+    return "kazoeyakuman";
+  } else if (han >= 11) {
+    return "sanbaiman";
+  } else if (han >= 8) {
+    return "baiman";
+  } else if (han >= 6) {
+    return "haneman";
+  } else {
+    return "mangan";
+  }
 }
 
 export function calculateScoreTable(

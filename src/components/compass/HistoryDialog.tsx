@@ -1,8 +1,8 @@
 import clsx from "clsx";
 import { useTranslation } from "react-i18next";
 
-import { type Game, type HistoryEntry } from "../../data/interfaces";
-import { getWindNameTranslated, nextWind } from "../../lib/hand";
+import { type Game, type HistoryEntry, type Win } from "../../data/interfaces";
+import { getWindNameTranslated, limitOf, nextWind } from "../../lib/hand";
 import { restoreEntry } from "../../lib/history";
 import { useDb } from "../../providers/DbProvider";
 import CustomDialog from "../layout/CustomDialog";
@@ -42,6 +42,23 @@ export function HistoryDialog({
           Number(nextWind(entry.bottomWind, b, isSanma)),
       );
 
+  // "Mangan (8000 points)", or the han and fu below a mangan.
+  const value = ({ hand, points }: Win) => {
+    if (hand == null) {
+      return t("compass.history.points", { points });
+    }
+    const limit = limitOf(hand.han, hand.fu, settings);
+    const name =
+      hand.yakuman > 6
+        ? t("common.yakuman.over", { value: hand.yakuman })
+        : hand.yakuman > 0
+          ? t(`common.yakuman.${hand.yakuman}`)
+          : limit != null
+            ? t(`common.${limit}`)
+            : t("compass.history.hanFu", { han: hand.han, fu: hand.fu });
+    return t("compass.history.value", { name, points });
+  };
+
   const describe = (entry: HistoryEntry): string[] => {
     const { event } = entry;
     switch (event.t) {
@@ -49,32 +66,32 @@ export function HistoryDialog({
         return [];
       case "tsumo":
         return [
-          t("compass.history.tsumo", {
-            winner: seat(entry, event.winner),
-            points: event.points,
-          }),
+          t("compass.history.tsumo", { winner: seat(entry, event.winner) }),
+          value(event),
         ];
       case "ron":
-        return [
-          t(
-            event.wins.length === 3
-              ? "compass.history.tripleRon"
-              : event.wins.length === 2
-                ? "compass.history.doubleRon"
-                : "compass.history.ron",
-            {
-              winners: event.wins
-                .map((w) =>
-                  t("compass.history.win", {
-                    seat: seat(entry, w.winner),
-                    points: w.points,
-                  }),
-                )
-                .join(", "),
-              dealtIn: seat(entry, event.dealtIn),
-            },
-          ),
-        ];
+        return event.wins.length === 1
+          ? [
+              t("compass.history.ron", {
+                winner: seat(entry, event.wins[0].winner),
+                dealtIn: seat(entry, event.dealtIn),
+              }),
+              value(event.wins[0]),
+            ]
+          : [
+              t(
+                event.wins.length === 3
+                  ? "compass.history.tripleRon"
+                  : "compass.history.doubleRon",
+                { dealtIn: seat(entry, event.dealtIn) },
+              ),
+              ...event.wins.map((win) =>
+                t("compass.history.winnerValue", {
+                  seat: seat(entry, win.winner),
+                  value: value(win),
+                }),
+              ),
+            ];
       case "exhaust":
         return [
           t("compass.exhaust"),

@@ -102,14 +102,14 @@ export default function ScoreDisplay({
           <span
             key={change.n}
             className={clsx(
-              "pointer-events-none absolute animate-score-delta rounded-full bg-slate-50 px-2 py-0.5 text-sm font-bold shadow lg:text-xl dark:bg-gray-800",
+              "pointer-events-none absolute animate-score-delta text-sm font-bold lg:text-xl",
               delta > 0
-                ? "text-green-600 dark:text-green-500"
+                ? "text-green-700 dark:text-green-500"
                 : "text-red-600 dark:text-red-500",
-              // On the edge facing the centre, which is up for the player it belongs to.
+              // Inside the box, along the edge facing the centre, in the gap before the wind tile.
               vertical
-                ? "top-1/2 -right-3 -translate-y-1/2 px-0.5 py-2 [text-orientation:sideways] [writing-mode:vertical-rl]"
-                : "-top-3 left-1/2 -translate-x-1/2",
+                ? "right-0.5 bottom-16 [text-orientation:sideways] [writing-mode:vertical-rl] lg:right-1 lg:bottom-24"
+                : "top-0.5 right-16 lg:top-1 lg:right-24",
             )}
           >
             {delta > 0 ? `+${delta}` : delta}

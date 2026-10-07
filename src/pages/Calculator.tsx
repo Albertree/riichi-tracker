@@ -32,7 +32,7 @@ import { HTrans } from "../components/text/Localized";
 import Tiles from "../components/Tiles";
 import Toggle from "../components/Toggle";
 import ToggleOnOff from "../components/ToggleOnOff";
-import { type Game, type GameEvent } from "../data/interfaces";
+import { type Game, type GameEvent, type HandValue } from "../data/interfaces";
 import useLocalStorage from "../hooks/useLocalStorage";
 import { type Action, defaultAction } from "../lib/action";
 import {
@@ -476,6 +476,7 @@ function CalculatorWithGame({
 
   const transferScores = async (
     calcPoints: Exclude<CalculatedPoints, { agari: null }>,
+    handValue: HandValue,
   ) => {
     if (
       game == null ||
@@ -506,7 +507,11 @@ function CalculatorWithGame({
     if (locState.agari === "ron" && calcPoints.agari === "ron") {
       const rons = [
         ...locState.wonSoFar,
-        { winner: locState.winner, points: calcPoints.points.total },
+        {
+          winner: locState.winner,
+          points: calcPoints.points.total,
+          hand: handValue,
+        },
       ];
       if (locState.nextWinners.length > 0) {
         const [next, ...rest] = locState.nextWinners;
@@ -546,6 +551,7 @@ function CalculatorWithGame({
         t: "tsumo",
         winner: locState.winner,
         points: calcPoints.points.total,
+        hand: handValue,
       };
       scores_[locState.winner] += calcPoints.points.total;
       if (locState.scoreRiichiSticks) {
@@ -792,7 +798,12 @@ function CalculatorWithGame({
                           "bg-amber-500 hover:bg-amber-600 dark:bg-amber-700 dark:hover:bg-amber-800",
                         )}
                         onClick={() => {
-                          void transferScores(hanFuScores);
+                          void transferScores(hanFuScores, {
+                            han,
+                            fu,
+                            // The quick input has a single 13+ entry for any yakuman.
+                            yakuman: han >= 13 && settings.kazoeYakuman ? 1 : 0,
+                          });
                         }}
                       >
                         {nextWinnerLabel ?? t("calc.transferPoints")}
@@ -1468,7 +1479,11 @@ function CalculatorWithGame({
                   transferLabel={nextWinnerLabel}
                   onTransferClick={() => {
                     if (scoreResult?.agari != null) {
-                      void transferScores(scoreResult);
+                      void transferScores(scoreResult, {
+                        han: scoreResult.han,
+                        fu: scoreResult.fu,
+                        yakuman: scoreResult.yakuman,
+                      });
                     }
                   }}
                 />

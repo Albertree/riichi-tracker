@@ -34,14 +34,24 @@ export type AbortKind =
   | "fourKans"
   | "tripleRon";
 
+// Counted yakuman is left to the han; `yakuman` is for the real ones.
+export interface HandValue {
+  han: number;
+  fu: number;
+  yakuman: number;
+}
+
+// The hand value is missing on wins recorded before it was kept.
+export interface Win {
+  winner: number;
+  points: number;
+  hand?: HandValue;
+}
+
 export type GameEvent =
   | { t: "start" }
-  | { t: "tsumo"; winner: number; points: number }
-  | {
-      t: "ron";
-      wins: { winner: number; points: number }[];
-      dealtIn: number;
-    }
+  | ({ t: "tsumo" } & Win)
+  | { t: "ron"; wins: Win[]; dealtIn: number }
   | { t: "exhaust"; tenpai: number[]; nagashi: number[] }
   | { t: "abort"; kind: AbortKind }
   | { t: "chombo"; player: number };

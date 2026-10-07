@@ -1,3 +1,4 @@
+import { type Win } from "../data/interfaces";
 import { type Wind } from "./hand";
 
 export type CompassState = { t: "load"; id: string; oldScores?: number[] };
@@ -22,7 +23,7 @@ export type CalculatorState =
           // With several winners on one discard, each hand is calculated in turn,
           // closest to the dealt-in player first, and settled together at the end.
           nextWinners: number[];
-          wonSoFar: { winner: number; points: number }[];
+          wonSoFar: Win[];
         }
     ))
   | { t: "load"; id: string };
