@@ -270,6 +270,68 @@ export default function SettingsDialog({
             </SettingRow>
           )}
           <SettingRow
+            name={t("settings.nagashiMangan.$")}
+            compass
+            help={
+              <span>
+                <HTrans i18nKey="settings.nagashiMangan.help" />
+              </span>
+            }
+          >
+            <Button
+              active={!settings.nagashiAsWin}
+              onClick={() =>
+                change((s) => {
+                  s.nagashiAsWin = false;
+                })
+              }
+            >
+              {t("settings.nagashiMangan.draw")}
+            </Button>
+            <Button
+              active={settings.nagashiAsWin}
+              onClick={() =>
+                change((s) => {
+                  s.nagashiAsWin = true;
+                })
+              }
+            >
+              {t("settings.nagashiMangan.win")}
+            </Button>
+          </SettingRow>
+          {settings.sanma == null && (
+            <SettingRow
+              name={t("settings.tripleRon.$")}
+              compass
+              help={
+                <span>
+                  <HTrans i18nKey="settings.tripleRon.help" />
+                </span>
+              }
+            >
+              <Button
+                active={!settings.sanchahou}
+                onClick={() =>
+                  change((s) => {
+                    s.sanchahou = false;
+                  })
+                }
+              >
+                {t("settings.tripleRon.win")}
+              </Button>
+              <Button
+                active={settings.sanchahou}
+                onClick={() =>
+                  change((s) => {
+                    s.sanchahou = true;
+                  })
+                }
+              >
+                {t("settings.tripleRon.draw")}
+              </Button>
+            </SettingRow>
+          )}
+          <SettingRow
             name={t("settings.roundedMangan.$")}
             help={
               <span>

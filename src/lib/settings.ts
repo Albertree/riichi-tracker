@@ -13,6 +13,8 @@ export interface ScoreSettings {
   northYakuhai: boolean;
   akadora: boolean;
   usePao: boolean;
+  nagashiAsWin: boolean;
+  sanchahou: boolean;
   otherScoring: boolean;
   disabledYaku: string[];
   enabledLocalYaku: string[];
@@ -33,6 +35,8 @@ export const DefaultSettings: ScoreSettings = {
   northYakuhai: false,
   akadora: true,
   usePao: false,
+  nagashiAsWin: false,
+  sanchahou: false,
   otherScoring: false,
   disabledYaku: [],
   enabledLocalYaku: [],

@@ -54,6 +54,8 @@ function toSettings(settings: ScoreSettings_): ScoreSettings {
     northYakuhai: settings.northYakuhai,
     akadora: settings.akadora,
     usePao: settings.usePao,
+    nagashiAsWin: settings.nagashiAsWin,
+    sanchahou: settings.sanchahou,
     otherScoring: settings.otherScoring,
     disabledYaku: settings.disabledYaku,
     enabledLocalYaku: settings.enabledLocalYaku,
@@ -77,6 +79,8 @@ function fromSettings(id: string, settings: ScoreSettings): ScoreSettings_ {
     northYakuhai: settings.northYakuhai,
     akadora: settings.akadora,
     usePao: settings.usePao,
+    nagashiAsWin: settings.nagashiAsWin,
+    sanchahou: settings.sanchahou,
     otherScoring: settings.otherScoring,
     disabledYaku: settings.disabledYaku,
     enabledLocalYaku: settings.enabledLocalYaku,
@@ -159,6 +163,27 @@ db.version(5)
       .toCollection()
       .modify((old: Partial<ScoreSettings>) => {
         old.northYakuhai = false;
+      });
+  });
+
+db.version(6)
+  .stores({
+    games: "++id", // id, roundWind, round, repeats, bottomWind, scores, riichiSticks, riichi, settings(..., nagashiAsWin, sanchahou)
+    settings: "++id", // id, ...settings(..., nagashiAsWin, sanchahou)
+  })
+  .upgrade(async (tx) => {
+    await tx
+      .table("games")
+      .toCollection()
+      .modify((old: PartialGame) => {
+        updateSettings(old);
+      });
+    await tx
+      .table("settings")
+      .toCollection()
+      .modify((old: Partial<ScoreSettings>) => {
+        old.nagashiAsWin = false;
+        old.sanchahou = false;
       });
   });
 

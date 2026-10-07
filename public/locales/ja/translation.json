@@ -39,6 +39,7 @@
       "yaku": "役"
     },
     "kita": "北 ({{nukidora}})",
+    "nextWinner": "次の和了者へ ({{current}}/{{total}})",
     "noYaku": "役なし",
     "notEnoughTiles": "牌が足りず、和了形になりません。",
     "pattern": {
@@ -129,6 +130,14 @@
   },
   "compass": {
     "abort": "途中流局",
+    "abortKind": {
+      "fourKans": "四開槓",
+      "fourRiichi": "四家立直",
+      "fourWinds": "四風連打",
+      "nineTerminals": "九種九牌",
+      "tripleRon": "三家和"
+    },
+    "abortType": "途中流局の種類",
     "calculateHand": "手牌を計算",
     "chombo": "チョンボ",
     "dealerRepeat": "連荘",
@@ -136,8 +145,10 @@
     "drawType": "流局の種類",
     "editScore": "点数を修正",
     "exhaust": "荒牌平局",
+    "fourRiichiPays": "リーチ未入力の人もリーチ棒を出します。",
     "gameIdDoesNotExist": "エラー: ゲーム {{id}} は存在しません。",
     "handleDraws": "流局の処理",
+    "nagashiPlayers": "流し満貫の成立者",
     "otherActions": "その他の操作",
     "pao": "包",
     "paysOutReverseMangan": "<H>逆満貫</H>を支払います。",
@@ -154,7 +165,8 @@
     "scoreRepeatSticks": "積み棒を精算",
     "scoreRiichiSticks": "立直棒を精算",
     "seatRotation": "席の移動",
-    "transferPoints": "点数移動"
+    "transferPoints": "点数移動",
+    "winners": "和了者"
   },
   "home": {
     "calculator": "計算機",
@@ -310,6 +322,12 @@
       "$": "言語",
       "help": "画面に表示する言語です。"
     },
+    "nagashiMangan": {
+      "$": "流し満貫",
+      "draw": "流局扱い",
+      "help": "流し満貫の精算方法です。<br /><H>流局扱い</H>：満貫ツモ分の点数のみ受け取り、リーチ棒と積み棒は受け取りません。親が聴牌なら連荘です。<br /><H>和了扱い</H>：リーチ棒と積み棒も受け取ります。親が流し満貫なら連荘です。",
+      "win": "和了扱い"
+    },
     "northTiles": {
       "$": "北の扱い",
       "help": "三人打ちでは、北は<B>北抜き</B>として抜くか、自風に関係なく<B>役牌</B>として使えます。<B>北抜き</B>にすると北を数えるカウンターが表示されます。",
@@ -363,6 +381,12 @@
       "help": "計算機で使う役をオン・オフします。<br /><B>任意の役</B>はよく使う役なので既定でオンですが、必要なら外せます。<br /><B>ローカル役</B>はあまり使われないため既定でオフです。",
       "local": "ローカル役 (+{{length}})",
       "optional": "任意の役 (-{{length}})"
+    },
+    "tripleRon": {
+      "$": "三家和",
+      "draw": "流局",
+      "help": "同じ打牌に三人がロンした場合の扱いです。<br /><H>トリプルロン</H>：三人とも和了します。<br /><H>流局</H>：途中流局となり、ロンは二人までです。",
+      "win": "トリプルロン"
     },
     "tsumoPoints": {
       "$": "ツモ時の点数",

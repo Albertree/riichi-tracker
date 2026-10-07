@@ -39,6 +39,7 @@
       "yaku": "역"
     },
     "kita": "북빼기 ({{nukidora}})",
+    "nextWinner": "다음 화료자 ({{current}}/{{total}})",
     "noYaku": "역 없음",
     "notEnoughTiles": "패가 부족해 완성된 손패를 만들 수 없습니다.",
     "pattern": {
@@ -129,6 +130,14 @@
   },
   "compass": {
     "abort": "도중유국",
+    "abortKind": {
+      "fourKans": "사깡유국",
+      "fourRiichi": "사가리치",
+      "fourWinds": "사풍연타",
+      "nineTerminals": "구종구패",
+      "tripleRon": "삼가화"
+    },
+    "abortType": "도중유국 종류",
     "calculateHand": "손패 계산",
     "chombo": "촘보",
     "dealerRepeat": "연장",
@@ -136,8 +145,10 @@
     "drawType": "유국 종류",
     "editScore": "점수 수정",
     "exhaust": "황패유국",
+    "fourRiichiPays": "리치를 누르지 않은 사람도 리치봉을 냅니다.",
     "gameIdDoesNotExist": "오류: 게임 {{id}}이(가) 존재하지 않습니다.",
     "handleDraws": "유국 처리",
+    "nagashiPlayers": "유국만관한 사람",
     "otherActions": "기타 동작",
     "pao": "파오",
     "paysOutReverseMangan": "<H>역만관</H>을 지불합니다.",
@@ -154,7 +165,8 @@
     "scoreRepeatSticks": "본장봉 정산",
     "scoreRiichiSticks": "리치봉 정산",
     "seatRotation": "자리 이동",
-    "transferPoints": "점수 이동"
+    "transferPoints": "점수 이동",
+    "winners": "화료한 사람"
   },
   "home": {
     "calculator": "계산기",
@@ -310,6 +322,12 @@
       "$": "언어",
       "help": "화면에 표시할 언어입니다."
     },
+    "nagashiMangan": {
+      "$": "유국만관",
+      "draw": "유국 취급",
+      "help": "유국만관을 정산하는 방식입니다.<br /><H>유국 취급</H>: 만관 쯔모 점수만 받고 리치봉과 본장봉은 받지 않습니다. 친이 텐파이면 연장합니다.<br /><H>화료 취급</H>: 리치봉과 본장봉도 받습니다. 유국만관한 사람이 친이면 연장합니다.",
+      "win": "화료 취급"
+    },
     "northTiles": {
       "$": "북 패",
       "help": "3인 마작에서 북 패는 <B>북빼기</B>로 처리하거나, 자풍과 상관없이 <B>역패</B>로 쓸 수 있습니다. <B>북빼기</B>를 쓰면 뽑아낸 북 패를 세는 카운터가 생깁니다.",
@@ -363,6 +381,12 @@
       "help": "계산기에서 쓸 역을 켜거나 끕니다.<br /><B>선택 역</B>은 흔히 쓰는 역이라 기본으로 켜져 있고, 필요하면 끌 수 있습니다.<br /><B>로컬역</B>은 대체로 드물어서 기본으로 꺼져 있습니다.",
       "local": "로컬역 (+{{length}})",
       "optional": "선택 역 (-{{length}})"
+    },
+    "tripleRon": {
+      "$": "삼가화",
+      "draw": "유국",
+      "help": "한 버림패에 세 명이 론했을 때의 처리입니다.<br /><H>트리플론</H>: 세 명 모두 화료합니다.<br /><H>유국</H>: 도중유국이 되며 론은 두 명까지만 할 수 있습니다.",
+      "win": "트리플론"
     },
     "tsumoPoints": {
       "$": "쯔모 점수",

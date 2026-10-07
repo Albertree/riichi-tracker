@@ -6,11 +6,11 @@ import { type Game } from "../../data/interfaces";
 import { nextWind } from "../../lib/hand";
 import { type CalculatorState } from "../../lib/states";
 import Button from "../Button";
-import TileButton from "../calculator/TileButton";
 import CustomDialog from "../layout/CustomDialog";
 import HorizontalRow from "../layout/HorizontalRow";
 import Toggle from "../Toggle";
 import ToggleOnOff from "../ToggleOnOff";
+import PlayerButton from "./PlayerButton";
 
 export function WinnerDialog({
   winner,
@@ -28,11 +28,18 @@ export function WinnerDialog({
 
   const { bottomWind, roundWind, settings } = game;
   const isSanma = settings.sanma != null;
-  const seatWind = nextWind(bottomWind, winner, isSanma);
+  const playerIxes = isSanma ? [0, 1, 2] : [0, 1, 2, 3];
+  const seatWindOf = (i: number) => nextWind(bottomWind, i, isSanma);
+  const seatWind = seatWindOf(winner);
+  // Someone has to deal in, and three winners is a draw when sanchahou is on.
+  const maxWinners =
+    playerIxes.length - 1 - (!isSanma && settings.sanchahou ? 1 : 0);
 
   const [agari, setAgari] = useState<
     { t: "tsumo" } | { t: "ron"; dealIn: number }
   >({ t: "tsumo" });
+  // Only ron can have more than one winner.
+  const [winners, setWinners] = useState([winner]);
   const [handleRotation, setHandleRotation] = useState(seatWind !== "1");
   const [dealerRepeat, setDealerRepeat] = useState(seatWind === "1");
   const [scoreRiichiSticks, setScoreRiichiSticks] = useState(true);
@@ -40,22 +47,77 @@ export function WinnerDialog({
   const [isPao, setIsPao] = useState(false);
   const [paoPlayer, setPaoPlayer] = useState<number | null>(null);
 
+  const dealerWins = winners.some((i) => seatWindOf(i) === "1");
+  const paoCandidates = playerIxes.filter(
+    (i) =>
+      !winners.includes(i) && (agari.t === "ron" ? i !== agari.dealIn : true),
+  );
+
+  const changeWinners = (winners_: number[]) => {
+    const dealerWins_ = winners_.some((i) => seatWindOf(i) === "1");
+    setWinners(winners_);
+    setDealerRepeat(dealerWins_);
+    setHandleRotation(!dealerWins_);
+    setIsPao(false);
+    setPaoPlayer(null);
+  };
+
+  const toggleWinner = (i: number) => {
+    if (agari.t !== "ron") {
+      return;
+    }
+    let winners_: number[];
+    if (winners.includes(i)) {
+      if (winners.length === 1) {
+        return;
+      }
+      winners_ = winners.filter((j) => j !== i);
+    } else {
+      if (winners.length >= maxWinners) {
+        return;
+      }
+      winners_ = [...winners, i];
+    }
+    if (winners_.includes(agari.dealIn)) {
+      setAgari({
+        t: "ron",
+        dealIn: playerIxes.filter((j) => !winners_.includes(j))[0],
+      });
+    }
+    changeWinners(winners_);
+  };
+
   const submitWinner = () => {
-    const state: CalculatorState = {
+    const common = {
       t: "transfer",
       id: gameId,
       roundWind,
-      seatWind,
-      winner,
       handleRotation,
-      dealerRepeat,
+      dealerRepeat: dealerWins && dealerRepeat,
       scoreRiichiSticks,
       scoreRepeatSticks,
       pao: isPao ? paoPlayer : null,
-      ...(agari.t === "tsumo"
-        ? { agari: "tsumo" }
-        : { agari: "ron", dealtInPlayer: agari.dealIn }),
-    };
+    } as const;
+    let state: CalculatorState;
+    if (agari.t === "tsumo") {
+      state = { ...common, winner, seatWind, agari: "tsumo" };
+    } else {
+      // Turn order runs upwards through the player indices.
+      const turnsAfterDealIn = (i: number) =>
+        (i - agari.dealIn + playerIxes.length) % playerIxes.length;
+      const [first, ...rest] = winners
+        .slice()
+        .sort((a, b) => turnsAfterDealIn(a) - turnsAfterDealIn(b));
+      state = {
+        ...common,
+        winner: first,
+        seatWind: seatWindOf(first),
+        agari: "ron",
+        dealtInPlayer: agari.dealIn,
+        nextWinners: rest,
+        wonSoFar: [],
+      };
+    }
     void navigate("/calculator", { state, replace: true });
   };
 
@@ -79,35 +141,48 @@ export function WinnerDialog({
                 b
                   ? {
                       t: "ron",
-                      dealIn: (isSanma ? [0, 1, 2] : [0, 1, 2, 3]).filter(
-                        (i) => i !== winner,
-                      )[0],
+                      dealIn: playerIxes.filter((i) => i !== winner)[0],
                     }
                   : { t: "tsumo" },
               );
+              changeWinners([winner]);
             }}
             left={t("common.tsumo")}
             right={t("common.ron")}
           />
           {agari.t === "ron" && (
             <>
+              <p className="text-xl lg:text-2xl">{t("compass.winners")}</p>
+              <HorizontalRow>
+                {playerIxes.map((i) => (
+                  <PlayerButton
+                    key={i}
+                    wind={seatWindOf(i)}
+                    selected={winners.includes(i)}
+                    disabled={
+                      !winners.includes(i) && winners.length >= maxWinners
+                    }
+                    onClick={() => toggleWinner(i)}
+                  />
+                ))}
+              </HorizontalRow>
               <p className="text-xl lg:text-2xl">
                 {t("compass.dealtinPlayer")}
               </p>
               <HorizontalRow>
-                {(isSanma ? [0, 1, 2] : [0, 1, 2, 3])
-                  .filter((i) => i !== winner)
+                {playerIxes
+                  .filter((i) => !winners.includes(i))
                   .map((i) => (
-                    <TileButton
+                    <PlayerButton
                       key={i}
-                      tile={`${nextWind(bottomWind, i, isSanma)}z`}
-                      dora={i === agari.dealIn}
+                      wind={seatWindOf(i)}
+                      selected={i === agari.dealIn}
                       onClick={() => {
                         setAgari({ t: "ron", dealIn: i });
                         if (paoPlayer === i) {
                           setPaoPlayer(
-                            (isSanma ? [0, 1, 2] : [0, 1, 2, 3]).filter(
-                              (j) => j !== winner && j !== i,
+                            playerIxes.filter(
+                              (j) => !winners.includes(j) && j !== i,
                             )[0],
                           );
                         }
@@ -129,23 +204,13 @@ export function WinnerDialog({
           >
             {t("compass.scoreRepeatSticks")}
           </ToggleOnOff>
-          {settings.usePao && (
+          {settings.usePao && winners.length === 1 && (
             <>
               <ToggleOnOff
                 toggled={isPao}
                 onToggle={(b) => {
                   setIsPao(b);
-                  if (b) {
-                    setPaoPlayer(
-                      (isSanma ? [0, 1, 2] : [0, 1, 2, 3]).filter(
-                        (i) =>
-                          i !== winner &&
-                          (agari.t === "ron" ? i !== agari.dealIn : true),
-                      )[0],
-                    );
-                  } else {
-                    setPaoPlayer(null);
-                  }
+                  setPaoPlayer(b ? paoCandidates[0] : null);
                 }}
               >
                 {t("compass.pao")}
@@ -156,27 +221,21 @@ export function WinnerDialog({
                     {t("compass.responsiblePlayer")}
                   </p>
                   <HorizontalRow>
-                    {(isSanma ? [0, 1, 2] : [0, 1, 2, 3])
-                      .filter(
-                        (i) =>
-                          i !== winner &&
-                          (agari.t === "ron" ? i !== agari.dealIn : true),
-                      )
-                      .map((i) => (
-                        <TileButton
-                          key={i}
-                          tile={`${nextWind(bottomWind, i, isSanma)}z`}
-                          dora={i === paoPlayer}
-                          onClick={() => setPaoPlayer(i)}
-                        />
-                      ))}
+                    {paoCandidates.map((i) => (
+                      <PlayerButton
+                        key={i}
+                        wind={seatWindOf(i)}
+                        selected={i === paoPlayer}
+                        onClick={() => setPaoPlayer(i)}
+                      />
+                    ))}
                   </HorizontalRow>
                 </>
               )}
             </>
           )}
           <p className="text-xl lg:text-2xl">{t("compass.seatRotation")}</p>
-          {seatWind === "1" && (
+          {dealerWins && (
             <ToggleOnOff
               toggled={dealerRepeat}
               incompatible={handleRotation}
@@ -192,11 +251,11 @@ export function WinnerDialog({
           )}
           <ToggleOnOff
             toggled={handleRotation}
-            incompatible={seatWind === "1" && dealerRepeat}
+            incompatible={dealerWins && dealerRepeat}
             onToggle={(b) => {
               setHandleRotation(b);
               if (b) {
-                if (seatWind === "1") {
+                if (dealerWins) {
                   setDealerRepeat(false);
                 }
               }

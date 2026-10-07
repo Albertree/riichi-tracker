@@ -90,6 +90,8 @@ export default function Calculator() {
           </div>
         ) : game.ok ? (
           <CalculatorWithGame
+            // Start from an empty hand for each winner of a multiple ron.
+            key={locState.winner}
             locState={locState}
             globalSettings={null}
             game={game.value}
@@ -460,6 +462,17 @@ function CalculatorWithGame({
     locState.t === "transfer" && prefersQuickInit === "true",
   );
 
+  // Shown on the transfer button while more winners of a multiple ron are left to calculate.
+  const nextWinnerLabel =
+    locState.t === "transfer" &&
+    locState.agari === "ron" &&
+    locState.nextWinners.length > 0
+      ? t("calc.nextWinner", {
+          current: locState.wonSoFar.length + 1,
+          total: locState.wonSoFar.length + 1 + locState.nextWinners.length,
+        })
+      : null;
+
   const transferScores = async (
     calcPoints: Exclude<CalculatedPoints, { agari: null }>,
   ) => {
@@ -486,31 +499,53 @@ function CalculatorWithGame({
     const isOya = locState.seatWind === "1";
 
     const scores_ = scores.slice(0);
-    scores_[locState.winner] += calcPoints.points.total;
-    if (locState.scoreRepeatSticks && riichiSticks) {
-      scores_[locState.winner] += 1000 * riichiSticks;
-    }
-    if (locState.scoreRepeatSticks) {
-      scores_[locState.winner] += repeats * honba;
-    }
 
     // This is technically exhaustive, TS just can't recognize the two values are the same.
     if (locState.agari === "ron" && calcPoints.agari === "ron") {
-      if (locState.pao == null) {
-        const deltas = isOya ? calcPoints.points.oya : calcPoints.points.ko;
-        scores_[locState.dealtInPlayer] -= deltas.ron;
+      const rons = [
+        ...locState.wonSoFar,
+        { winner: locState.winner, points: calcPoints.points.total },
+      ];
+      if (locState.nextWinners.length > 0) {
+        const [next, ...rest] = locState.nextWinners;
+        const state: CalculatorState = {
+          ...locState,
+          winner: next,
+          seatWind: nextWind(bottomWind, next, isSanma),
+          nextWinners: rest,
+          wonSoFar: rons,
+        };
+        void navigate("/calculator", { state, replace: true });
+        return;
+      }
+
+      // The riichi sticks all go to the winner closest to the dealt-in player, who was calculated first.
+      if (locState.scoreRiichiSticks) {
+        scores_[rons[0].winner] += 1000 * riichiSticks;
+      }
+      // The dealt-in player pays every winner in full, repeat sticks included.
+      for (const ron of rons) {
+        scores_[ron.winner] += ron.points;
         if (locState.scoreRepeatSticks) {
+          scores_[ron.winner] += repeats * honba;
           scores_[locState.dealtInPlayer] -= repeats * honba;
         }
-      } else {
-        const delta = ceil100(calcPoints.points.total / 2);
-        scores_[locState.dealtInPlayer] -= delta;
-        scores_[locState.pao] -= delta;
-        if (locState.scoreRepeatSticks) {
-          scores_[locState.dealtInPlayer] -= repeats * honba;
+        if (locState.pao == null) {
+          scores_[locState.dealtInPlayer] -= ron.points;
+        } else {
+          const delta = ceil100(ron.points / 2);
+          scores_[locState.dealtInPlayer] -= delta;
+          scores_[locState.pao] -= delta;
         }
       }
     } else if (locState.agari === "tsumo" && calcPoints.agari === "tsumo") {
+      scores_[locState.winner] += calcPoints.points.total;
+      if (locState.scoreRiichiSticks) {
+        scores_[locState.winner] += 1000 * riichiSticks;
+      }
+      if (locState.scoreRepeatSticks) {
+        scores_[locState.winner] += repeats * honba;
+      }
       if (locState.pao == null) {
         for (const loser of playerIxes.filter((i) => i !== locState.winner)) {
           const delta = isOya
@@ -533,7 +568,7 @@ function CalculatorWithGame({
     }
 
     const shouldRotate = locState.handleRotation;
-    const shouldRepeat = locState.seatWind === "1" && locState.dealerRepeat;
+    const shouldRepeat = locState.dealerRepeat;
     await db.setGame(locState.id, {
       ...game,
       ...(shouldRotate || shouldRepeat
@@ -739,7 +774,7 @@ function CalculatorWithGame({
                           void transferScores(hanFuScores);
                         }}
                       >
-                        {t("calc.transferPoints")}
+                        {nextWinnerLabel ?? t("calc.transferPoints")}
                       </button>
                     </div>
                   )}
@@ -1409,6 +1444,7 @@ function CalculatorWithGame({
                   tileCount={tileCount}
                   result={scoreResult}
                   transferButton={locState.t === "transfer"}
+                  transferLabel={nextWinnerLabel}
                   onTransferClick={() => {
                     if (scoreResult?.agari != null) {
                       void transferScores(scoreResult);

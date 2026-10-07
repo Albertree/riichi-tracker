@@ -39,6 +39,7 @@
       "yaku": "役"
     },
     "kita": "Kita ({{nukidora}})",
+    "nextWinner": "Next Winner ({{current}}/{{total}})",
     "noYaku": "No Yaku",
     "notEnoughTiles": "Not enough tiles to form a complete hand.",
     "pattern": {
@@ -129,6 +130,14 @@
   },
   "compass": {
     "abort": "Abort",
+    "abortKind": {
+      "fourKans": "Suukaikan",
+      "fourRiichi": "Suucha Riichi",
+      "fourWinds": "Suufon Renda",
+      "nineTerminals": "Kyuushu Kyuuhai",
+      "tripleRon": "Sanchahou"
+    },
+    "abortType": "Abort Reason",
     "calculateHand": "Calculate Hand",
     "chombo": "Chombo",
     "dealerRepeat": "Dealer Repeat",
@@ -136,8 +145,10 @@
     "drawType": "Draw Type",
     "editScore": "Edit Score",
     "exhaust": "Exhaust",
+    "fourRiichiPays": "Players not yet marked as riichi also pay their riichi stick.",
     "gameIdDoesNotExist": "Error: Game {{id}} does not exist.",
     "handleDraws": "Handle Draws",
+    "nagashiPlayers": "Nagashi Mangan Players",
     "otherActions": "Other Actions",
     "pao": "Pao",
     "paysOutReverseMangan": "Pays out a <H>reverse mangan</H>.",
@@ -154,7 +165,8 @@
     "scoreRepeatSticks": "Score Repeat Sticks",
     "scoreRiichiSticks": "Score Riichi Sticks",
     "seatRotation": "Seat Rotation",
-    "transferPoints": "Transfer Points"
+    "transferPoints": "Transfer Points",
+    "winners": "Winning Players"
   },
   "home": {
     "calculator": "Calculator",
@@ -310,6 +322,12 @@
       "$": "Language",
       "help": "The language of the interface."
     },
+    "nagashiMangan": {
+      "$": "Nagashi Mangan",
+      "draw": "As Draw",
+      "help": "How a nagashi mangan is settled.<br /><H>As Draw</H>: Only the mangan tsumo payment is made, with no riichi or honba sticks. The round repeats if the dealer is tenpai.<br /><H>As Win</H>: The riichi and honba sticks are also won. The round repeats if the dealer made the nagashi mangan.",
+      "win": "As Win"
+    },
     "northTiles": {
       "$": "North Tiles",
       "help": "North tiles can either be called with <B>kita</B> or used as <B>yakuhai</B> regardless of wind in three-player mahjong. With <B>kita</B>, a counter will be added to count north tiles.",
@@ -363,6 +381,12 @@
       "help": "Toggle the yaku available in the calculator.<br /><B>Optional yaku</B> are some of the usual yaku, enabled by default. They may be disabled if needed.<br /><B>Local yaku</B> are generally less common and are disabled by default.",
       "local": "Local Yaku (+{{length}})",
       "optional": "Optional Yaku (-{{length}})"
+    },
+    "tripleRon": {
+      "$": "Sanchahou",
+      "draw": "Abort",
+      "help": "What happens when three players call ron on the same discard.<br /><H>All Win</H>: All three players win.<br /><H>Abort</H>: The round is aborted, and at most two players can win by ron.",
+      "win": "All Win"
     },
     "tsumoPoints": {
       "$": "Tsumo Points",

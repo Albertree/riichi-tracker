@@ -10,12 +10,14 @@ export default function ScoreResult({
   tileCount,
   result,
   transferButton,
+  transferLabel,
   pao,
   onTransferClick,
 }: {
   tileCount: number;
   result: CalculatedValue | null;
   transferButton?: boolean;
+  transferLabel?: string | null;
   pao?: boolean;
   onTransferClick?: () => void;
 }) {
@@ -26,6 +28,7 @@ export default function ScoreResult({
         <ScoreResultSheet
           result={result}
           transferButton={transferButton}
+          transferLabel={transferLabel}
           pao={pao}
           onTransferClick={onTransferClick}
         />
@@ -41,11 +44,13 @@ export default function ScoreResult({
 function ScoreResultSheet({
   result,
   transferButton = false,
+  transferLabel,
   pao = false,
   onTransferClick,
 }: {
   result: CalculatedValue;
   transferButton?: boolean;
+  transferLabel?: string | null;
   pao?: boolean;
   onTransferClick?: () => void;
 }) {
@@ -104,7 +109,7 @@ function ScoreResultSheet({
                 )}
                 onClick={onTransferClick}
               >
-                {t("calc.transferCalculatedScore")}
+                {transferLabel ?? t("calc.transferCalculatedScore")}
               </button>
             </div>
           )}

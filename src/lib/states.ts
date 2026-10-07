@@ -14,5 +14,15 @@ export type CalculatorState =
       scoreRiichiSticks: boolean;
       scoreRepeatSticks: boolean;
       pao: number | null;
-    } & ({ agari: "tsumo" } | { agari: "ron"; dealtInPlayer: number }))
+    } & (
+      | { agari: "tsumo" }
+      | {
+          agari: "ron";
+          dealtInPlayer: number;
+          // With several winners on one discard, each hand is calculated in turn,
+          // closest to the dealt-in player first, and settled together at the end.
+          nextWinners: number[];
+          wonSoFar: { winner: number; points: number }[];
+        }
+    ))
   | { t: "load"; id: string };
