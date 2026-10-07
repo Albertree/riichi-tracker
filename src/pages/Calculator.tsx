@@ -80,10 +80,10 @@ export default function Calculator() {
   const game = db.useGame(locState.id, { enabled: locState.t === "transfer" });
 
   return (
-    <div className="min-h-screen bg-slate-200 text-black dark:bg-gray-900 dark:text-white">
+    <div className="min-h-dvh bg-slate-200 text-black dark:bg-gray-900 dark:text-white">
       {locState.t === "transfer" ? (
         game == null ? (
-          <div className="flex h-screen w-screen flex-col items-center justify-center">
+          <div className="flex h-dvh w-screen flex-col items-center justify-center">
             <div className="h-24 w-24 fill-black dark:fill-white">
               <BlocksShuffleThree />
             </div>
@@ -95,7 +95,7 @@ export default function Calculator() {
             game={game.value}
           />
         ) : (
-          <div className="flex h-screen w-screen flex-col items-center justify-center">
+          <div className="flex h-dvh w-screen flex-col items-center justify-center">
             <div className="font-mono">
               <H.Red>
                 {t(
@@ -108,7 +108,7 @@ export default function Calculator() {
           </div>
         )
       ) : globalSettings == null ? (
-        <div className="flex h-screen w-screen flex-col items-center justify-center">
+        <div className="flex h-dvh w-screen flex-col items-center justify-center">
           <div className="h-24 w-24 fill-black dark:fill-white">
             <BlocksShuffleThree />
           </div>
@@ -120,7 +120,7 @@ export default function Calculator() {
           game={null}
         />
       ) : (
-        <div className="flex h-screen w-screen flex-col items-center justify-center">
+        <div className="flex h-dvh w-screen flex-col items-center justify-center">
           <div className="font-mono">
             <H.Red>
               {t(
@@ -568,7 +568,7 @@ function CalculatorWithGame({
   return (
     <div className="flex flex-row justify-center">
       <Toaster position="top-center" />
-      <div className="h-screen w-full overflow-y-auto">
+      <div className="h-dvh w-full overflow-y-auto">
         <div className="fixed top-2 left-2 z-10 flex flex-col gap-y-2 lg:top-4 lg:left-4">
           <CircleButton
             onClick={() => {
@@ -643,7 +643,7 @@ function CalculatorWithGame({
             <>
               <div
                 ref={setPointsCalculatorEl}
-                className="flex min-h-screen w-full flex-col justify-center px-4 py-4 lg:py-8"
+                className="flex min-h-dvh w-full flex-col justify-center px-4 py-4 lg:py-8"
               >
                 <div className="flex flex-col items-center justify-center gap-y-2 lg:gap-y-4">
                   <h1 className="text-3xl lg:text-4xl">
@@ -747,7 +747,7 @@ function CalculatorWithGame({
               </div>
               <div
                 ref={setFuReferenceEl}
-                className="flex min-h-screen w-full flex-col items-center justify-center gap-y-2 bg-slate-300 p-2 dark:bg-sky-900"
+                className="flex min-h-dvh w-full flex-col items-center justify-center gap-y-2 bg-slate-300 p-2 dark:bg-sky-900"
               >
                 <h1 className="text-3xl lg:text-4xl">
                   {t("calc.fuReference.$")}
@@ -820,7 +820,7 @@ function CalculatorWithGame({
             <>
               <div
                 ref={setHandBuilderEl}
-                className="flex min-h-screen w-full flex-col items-center justify-center gap-y-2 px-2 py-2"
+                className="flex min-h-dvh w-full flex-col items-center justify-center gap-y-2 px-2 py-2"
               >
                 <div className="flex flex-row items-end gap-x-2">
                   <h1 className="text-3xl lg:text-4xl">
@@ -1403,7 +1403,7 @@ function CalculatorWithGame({
               </div>
               <div
                 ref={setScoreResultEl}
-                className="flex min-h-screen w-full flex-col justify-center bg-slate-300 px-4 py-4 lg:py-8 dark:bg-sky-900"
+                className="flex min-h-dvh w-full flex-col justify-center bg-slate-300 px-4 py-4 lg:py-8 dark:bg-sky-900"
               >
                 <ScoreResult
                   tileCount={tileCount}

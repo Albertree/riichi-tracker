@@ -36,9 +36,9 @@ export default function Reference() {
   const [tabsEl, setTabsEl] = useState<Element | null>(null);
 
   return (
-    <div className="min-h-screen bg-slate-200 text-black dark:bg-gray-900 dark:text-white">
+    <div className="min-h-dvh bg-slate-200 text-black dark:bg-gray-900 dark:text-white">
       <div className="flex flex-row justify-center">
-        <div className="h-screen w-full overflow-y-auto">
+        <div className="h-dvh w-full overflow-y-auto">
           <div className="fixed top-2 left-2 z-10 flex flex-col gap-y-2 lg:top-4 lg:left-4">
             <CircleButton
               onClick={() => {
@@ -76,7 +76,7 @@ export default function Reference() {
                 <StyledTab>{t("reference.yakuList")}</StyledTab>
                 <StyledTab>{t("reference.scoringTable")}</StyledTab>
               </TabList>
-              <TabPanels className="flex min-h-screen w-full flex-col justify-center bg-slate-300 px-2 py-4 lg:py-8 dark:bg-sky-900">
+              <TabPanels className="flex min-h-dvh w-full flex-col justify-center bg-slate-300 px-2 py-4 lg:py-8 dark:bg-sky-900">
                 <TabPanel>
                   <TileReference />
                 </TabPanel>

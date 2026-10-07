@@ -23,7 +23,7 @@ export default function App() {
   const [openPreferencesDialog, setOpenPreferencesDialog] = useState(false);
 
   return (
-    <div className="min-h-screen bg-slate-200 text-black dark:bg-gray-900 dark:text-white">
+    <div className="min-h-dvh bg-slate-200 text-black dark:bg-gray-900 dark:text-white">
       <div className="fixed top-0 right-0">
         <a
           href="https://github.com/Albertree/riichi-tracker"
@@ -44,7 +44,7 @@ export default function App() {
           <HiCog />
         </CircleButton>
       </div>
-      <div className="flex min-h-screen flex-col items-center justify-center gap-y-4 px-2 py-4 lg:gap-y-8">
+      <div className="flex min-h-dvh flex-col items-center justify-center gap-y-4 px-2 py-4 lg:gap-y-8">
         <h1 className="text-center text-4xl lg:text-6xl">
           {t("home.riichiTracker")}
         </h1>

@@ -1,2 +1,8 @@
 @import "tailwindcss";
 @custom-variant dark (&:where([data-theme=dark] *:not([data-theme=light])));
+
+/* The compass fills the viewport and never scrolls; keep a stray drag from triggering pull-to-refresh. */
+html:has([data-compass]),
+html:has([data-compass]) body {
+  overscroll-behavior: none;
+}
