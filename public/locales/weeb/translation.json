@@ -142,12 +142,14 @@
     "chombo": "Chombo",
     "dealerRepeat": "Dealer Repeat",
     "dealtinPlayer": "Dealt-In Player",
+    "doubleRon": "Double Ron",
     "drawType": "Draw Type",
     "editScore": "Edit Score",
     "exhaust": "Exhaust",
     "fourRiichiPays": "Players not yet marked as riichi also pay their riichi stick.",
     "gameIdDoesNotExist": "Error: Game {{id}} does not exist.",
     "handleDraws": "Handle Draws",
+    "multipleRon": "Multiple Ron",
     "nagashiPlayers": "Nagashi Mangan Players",
     "otherActions": "Other Actions",
     "pao": "Pao",
@@ -166,6 +168,7 @@
     "scoreRiichiSticks": "Score Riichi Sticks",
     "seatRotation": "Seat Rotation",
     "transferPoints": "Transfer Points",
+    "tripleRon": "Triple Ron",
     "winners": "Winning Players"
   },
   "home": {

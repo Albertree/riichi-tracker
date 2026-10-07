@@ -20,13 +20,14 @@ export default function PlayerButton({
   return (
     <div
       className={clsx(
-        "relative m-1 rounded-xl",
+        "relative m-1 flex rounded-xl",
         selected ? "ring-4 ring-amber-500 dark:ring-amber-600" : "opacity-40",
       )}
     >
       <TileButton
         tile={`${wind}z`}
         dora={selected}
+        flat
         forced={forced}
         disabled={disabled}
         onClick={onClick}

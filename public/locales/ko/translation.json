@@ -142,12 +142,14 @@
     "chombo": "촘보",
     "dealerRepeat": "연장",
     "dealtinPlayer": "방총한 사람",
+    "doubleRon": "더블론",
     "drawType": "유국 종류",
     "editScore": "점수 수정",
     "exhaust": "황패유국",
     "fourRiichiPays": "리치를 누르지 않은 사람도 리치봉을 냅니다.",
     "gameIdDoesNotExist": "오류: 게임 {{id}}이(가) 존재하지 않습니다.",
     "handleDraws": "유국 처리",
+    "multipleRon": "다가화",
     "nagashiPlayers": "유국만관한 사람",
     "otherActions": "기타 동작",
     "pao": "파오",
@@ -166,6 +168,7 @@
     "scoreRiichiSticks": "리치봉 정산",
     "seatRotation": "자리 이동",
     "transferPoints": "점수 이동",
+    "tripleRon": "트리플론",
     "winners": "화료한 사람"
   },
   "home": {

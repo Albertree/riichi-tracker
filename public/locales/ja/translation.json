@@ -142,12 +142,14 @@
     "chombo": "チョンボ",
     "dealerRepeat": "連荘",
     "dealtinPlayer": "放銃者",
+    "doubleRon": "ダブロン",
     "drawType": "流局の種類",
     "editScore": "点数を修正",
     "exhaust": "荒牌平局",
     "fourRiichiPays": "リーチ未入力の人もリーチ棒を出します。",
     "gameIdDoesNotExist": "エラー: ゲーム {{id}} は存在しません。",
     "handleDraws": "流局の処理",
+    "multipleRon": "複数和了",
     "nagashiPlayers": "流し満貫の成立者",
     "otherActions": "その他の操作",
     "pao": "包",
@@ -166,6 +168,7 @@
     "scoreRiichiSticks": "立直棒を精算",
     "seatRotation": "席の移動",
     "transferPoints": "点数移動",
+    "tripleRon": "トリプルロン",
     "winners": "和了者"
   },
   "home": {

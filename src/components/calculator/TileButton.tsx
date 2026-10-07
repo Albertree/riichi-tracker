@@ -14,6 +14,7 @@ export default function TileButton<T extends TileCode | "00" = TileCode>({
   forced = false,
   small = false,
   rotate = false,
+  flat = false,
   onClick,
 }: {
   tile: T;
@@ -24,6 +25,7 @@ export default function TileButton<T extends TileCode | "00" = TileCode>({
   forced?: boolean;
   small?: boolean;
   rotate?: boolean;
+  flat?: boolean;
   onClick?: (tile: T) => void;
 }) {
   const isLg = useMediaQuery({ query: "(min-width: 1024px)" });
@@ -34,7 +36,7 @@ export default function TileButton<T extends TileCode | "00" = TileCode>({
       data-theme={brightTiles === "true" ? "light" : null}
       className={clsx(
         small && !isLg ? "rounded-md" : "rounded-xl",
-        "shadow shadow-gray-400 dark:shadow-gray-800",
+        !flat && "shadow shadow-gray-400 dark:shadow-gray-800",
         agari ? "animate-pulse" : "",
         red
           ? "bg-rose-500 dark:bg-red-700"
@@ -60,7 +62,8 @@ export default function TileButton<T extends TileCode | "00" = TileCode>({
       data-theme={brightTiles === "true" ? "light" : null}
       className={clsx(
         small && !isLg ? "rounded-md" : "rounded-xl",
-        "shadow shadow-gray-400 disabled:opacity-50 dark:shadow-gray-800",
+        !flat && "shadow shadow-gray-400 dark:shadow-gray-800",
+        "disabled:opacity-50",
         agari ? "animate-pulse" : "",
         red
           ? "bg-rose-500 enabled:group-hover:bg-rose-600 enabled:hover:bg-rose-600 dark:bg-red-700 dark:enabled:group-hover:bg-red-800 dark:enabled:hover:bg-red-800"
