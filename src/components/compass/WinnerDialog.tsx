@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useRef, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { useNavigate } from "react-router-dom";
 
@@ -8,6 +8,7 @@ import { type CalculatorState } from "../../lib/states";
 import Button from "../Button";
 import CustomDialog from "../layout/CustomDialog";
 import HorizontalRow from "../layout/HorizontalRow";
+import H from "../text/H";
 import Toggle from "../Toggle";
 import ToggleOnOff from "../ToggleOnOff";
 import ToggleOptional from "../ToggleOptional";
@@ -39,12 +40,15 @@ export function WinnerDialog({
     playerIxes
       .filter((i) => i !== from)
       .sort((a, b) => turnsAfter(from)(a) - turnsAfter(from)(b));
+  // East first, the way the seats are usually read out.
+  const inSeatOrder = playerIxes
+    .slice()
+    .sort((a, b) => Number(seatWindOf(a)) - Number(seatWindOf(b)));
   // Someone has to deal in, and three winners is a draw when sanchahou is on.
   const canTripleRon = !isSanma && !settings.sanchahou;
 
-  const [agari, setAgari] = useState<
-    { t: "tsumo" } | { t: "ron"; dealIn: number }
-  >({ t: "tsumo" });
+  const [isRon, setIsRon] = useState(false);
+  const [dealIn, setDealIn] = useState<number | null>(null);
   // Only ron can have more than one winner.
   const [ronCount, setRonCount] = useState<1 | 2 | 3>(1);
   const [coWinner, setCoWinner] = useState<number | null>(null);
@@ -54,29 +58,42 @@ export function WinnerDialog({
   const [scoreRepeatSticks, setScoreRepeatSticks] = useState(true);
   const [isPao, setIsPao] = useState(false);
   const [paoPlayer, setPaoPlayer] = useState<number | null>(null);
+  // Whether to show what is still missing, once calculating has been tried.
+  const [attempted, setAttempted] = useState(false);
+  const errorRef = useRef<HTMLParagraphElement | null>(null);
 
   // Closest to the dealt-in player first, which is also who takes the riichi sticks.
   const winnersFor = (
-    dealIn: number | null,
+    dealIn_: number | null,
     ronCount_: 1 | 2 | 3,
     coWinner_: number | null,
   ) => {
-    if (dealIn == null || ronCount_ === 1) {
+    if (ronCount_ === 1) {
       return [winner];
     }
-    const candidates = inTurnOrderAfter(dealIn);
+    if (dealIn_ == null) {
+      return inSeatOrder.filter((i) => i === winner || i === coWinner_);
+    }
+    const candidates = inTurnOrderAfter(dealIn_);
     // Everyone but the dealt-in player won, so there is nobody left to pick.
     return ronCount_ === candidates.length
       ? candidates
       : candidates.filter((i) => i === winner || i === coWinner_);
   };
-  const dealIn = agari.t === "ron" ? agari.dealIn : null;
   const winners = winnersFor(dealIn, ronCount, coWinner);
-  const winnerCandidates = dealIn == null ? [] : inTurnOrderAfter(dealIn);
+  const winnerCandidates =
+    dealIn == null ? inSeatOrder : inTurnOrderAfter(dealIn);
   const dealerWins = winners.some((i) => seatWindOf(i) === "1");
-  const paoCandidates = playerIxes.filter((i) => i !== winner && i !== dealIn);
+  const paoCandidates = inSeatOrder.filter((i) => i !== winner && i !== dealIn);
+  const error = !isRon
+    ? null
+    : dealIn == null
+      ? t("compass.error.pickDealtIn")
+      : winners.length !== ronCount
+        ? t("compass.error.pickWinners", { winners: ronCount })
+        : null;
 
-  const change = (
+  const changeRon = (
     dealIn_: number | null,
     ronCount_: 1 | 2 | 3,
     coWinner_: number | null,
@@ -87,18 +104,26 @@ export function WinnerDialog({
     const dealerWins_ = winnersFor(dealIn_, ronCount_, coWinner_).some(
       (i) => seatWindOf(i) === "1",
     );
-    setAgari(dealIn_ == null ? { t: "tsumo" } : { t: "ron", dealIn: dealIn_ });
+    setDealIn(dealIn_);
     setRonCount(ronCount_);
     setCoWinner(coWinner_);
     setDealerRepeat(dealerWins_);
     setHandleRotation(!dealerWins_);
-    if (ronCount_ > 1 || paoPlayer === dealIn_) {
+    if (ronCount_ > 1 || (dealIn_ != null && paoPlayer === dealIn_)) {
       setIsPao(false);
       setPaoPlayer(null);
     }
   };
 
   const submitWinner = () => {
+    if (error != null) {
+      setAttempted(true);
+      // The button sits at the end of a long dialog, so bring the message into view.
+      requestAnimationFrame(() =>
+        errorRef.current?.scrollIntoView({ block: "nearest" }),
+      );
+      return;
+    }
     const common = {
       t: "transfer",
       id: gameId,
@@ -110,7 +135,7 @@ export function WinnerDialog({
       pao: isPao ? paoPlayer : null,
     } as const;
     let state: CalculatorState;
-    if (agari.t === "tsumo") {
+    if (!isRon || dealIn == null) {
       state = { ...common, winner, seatWind, agari: "tsumo" };
     } else {
       const [first, ...rest] = winners;
@@ -119,7 +144,7 @@ export function WinnerDialog({
         winner: first,
         seatWind: seatWindOf(first),
         agari: "ron",
-        dealtInPlayer: agari.dealIn,
+        dealtInPlayer: dealIn,
         nextWinners: rest,
         wonSoFar: [],
       };
@@ -141,21 +166,22 @@ export function WinnerDialog({
             {t("compass.pointDistribution")}
           </p>
           <Toggle
-            toggled={agari.t === "ron"}
-            onToggle={(b) =>
-              change(b ? inTurnOrderAfter(winner)[0] : null, 1, null)
-            }
+            toggled={isRon}
+            onToggle={(b) => {
+              setIsRon(b);
+              changeRon(null, 1, null);
+            }}
             left={t("common.tsumo")}
             right={t("common.ron")}
           />
-          {dealIn != null && (
+          {isRon && (
             <>
               <p className="text-xl lg:text-2xl">{t("compass.multipleRon")}</p>
               {canTripleRon ? (
                 <ToggleOptional
                   toggled={ronCount === 1 ? null : ronCount === 2 ? 0 : 1}
                   onToggle={(side) =>
-                    change(
+                    changeRon(
                       dealIn,
                       side == null ? 1 : side === 0 ? 2 : 3,
                       coWinner,
@@ -167,7 +193,7 @@ export function WinnerDialog({
               ) : (
                 <ToggleOnOff
                   toggled={ronCount === 2}
-                  onToggle={(b) => change(dealIn, b ? 2 : 1, coWinner)}
+                  onToggle={(b) => changeRon(dealIn, b ? 2 : 1, coWinner)}
                 >
                   {t("compass.doubleRon")}
                 </ToggleOnOff>
@@ -176,14 +202,16 @@ export function WinnerDialog({
                 {t("compass.dealtinPlayer")}
               </p>
               <HorizontalRow>
-                {inTurnOrderAfter(winner).map((i) => (
-                  <PlayerButton
-                    key={i}
-                    wind={seatWindOf(i)}
-                    selected={i === dealIn}
-                    onClick={() => change(i, ronCount, coWinner)}
-                  />
-                ))}
+                {inSeatOrder
+                  .filter((i) => i !== winner)
+                  .map((i) => (
+                    <PlayerButton
+                      key={i}
+                      wind={seatWindOf(i)}
+                      selected={i === dealIn}
+                      onClick={() => changeRon(i, ronCount, coWinner)}
+                    />
+                  ))}
               </HorizontalRow>
               {ronCount > 1 && (
                 <>
@@ -195,9 +223,11 @@ export function WinnerDialog({
                         wind={seatWindOf(i)}
                         selected={winners.includes(i)}
                         forced={
-                          i === winner || ronCount === winnerCandidates.length
+                          i === winner ||
+                          (dealIn != null &&
+                            ronCount === winnerCandidates.length)
                         }
-                        onClick={() => change(dealIn, ronCount, i)}
+                        onClick={() => changeRon(dealIn, ronCount, i)}
                       />
                     ))}
                   </HorizontalRow>
@@ -277,14 +307,20 @@ export function WinnerDialog({
             {t("compass.rotateSeats")}
           </ToggleOnOff>
         </form>
-        <Button
-          disabled={winners.length !== ronCount}
-          onClick={() => {
-            void submitWinner();
-          }}
-        >
-          {t("compass.calculateHand")}
-        </Button>
+        <div className="flex flex-col items-center justify-center gap-y-2">
+          <Button
+            onClick={() => {
+              void submitWinner();
+            }}
+          >
+            {t("compass.calculateHand")}
+          </Button>
+          {attempted && error != null && (
+            <p ref={errorRef} className="text-base lg:text-xl">
+              <H.Red>{error}</H.Red>
+            </p>
+          )}
+        </div>
       </div>
     </CustomDialog>
   );

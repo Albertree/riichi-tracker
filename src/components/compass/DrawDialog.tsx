@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useRef, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { useImmer } from "use-immer";
 
@@ -9,6 +9,7 @@ import { useDb } from "../../providers/DbProvider";
 import Button from "../Button";
 import CustomDialog from "../layout/CustomDialog";
 import HorizontalRow from "../layout/HorizontalRow";
+import H from "../text/H";
 import { HTrans } from "../text/Localized";
 import ToggleOnOff from "../ToggleOnOff";
 import ToggleThree from "../ToggleThree";
@@ -52,11 +53,27 @@ export function DrawDialog({
       (i) => tenpaiPlayers.has(i) && nextWind(bottomWind, i, isSanma) === "1",
     ),
   );
+  const [nagashi, setNagashi] = useState(false);
   const [nagashiPlayers, updateNagashiPlayers] = useImmer(new Set<number>());
+  // Whether to show what is still missing, once submitting has been tried.
+  const [attempted, setAttempted] = useState(false);
+  const errorRef = useRef<HTMLParagraphElement | null>(null);
   const [abortKind, setAbortKind] = useState<AbortKind>("nineTerminals");
   const [violationPlayer, setViolationPlayer] = useState<number>(0);
 
   const isDealer = (i: number) => nextWind(bottomWind, i, isSanma) === "1";
+  // East first, the way the seats are usually read out.
+  const inSeatOrder = playerIxes
+    .slice()
+    .sort(
+      (a, b) =>
+        Number(nextWind(bottomWind, a, isSanma)) -
+        Number(nextWind(bottomWind, b, isSanma)),
+    );
+  const error =
+    drawType === 0 && nagashi && nagashiPlayers.size === 0
+      ? t("compass.error.pickNagashi")
+      : null;
   const nagashiWins = settings.nagashiAsWin && nagashiPlayers.size > 0;
   const availableAbortKinds = abortKinds.filter((k) =>
     isSanma
@@ -65,6 +82,14 @@ export function DrawDialog({
   );
 
   const submitDraw = async () => {
+    if (error != null) {
+      setAttempted(true);
+      // The button sits at the end of a long dialog, so bring the message into view.
+      requestAnimationFrame(() =>
+        errorRef.current?.scrollIntoView({ block: "nearest" }),
+      );
+      return;
+    }
     if (drawType === 0) {
       const scores_ = game.scores.slice();
       let riichiSticks_ = game.riichiSticks;
@@ -194,17 +219,19 @@ export function DrawDialog({
           />
           {drawType === 0 && (
             <>
-              <p className="text-xl lg:text-2xl">
-                {t("compass.nagashiPlayers")}
-              </p>
+              <p className="text-xl lg:text-2xl">{t("compass.readyPlayers")}</p>
               <HorizontalRow>
-                {playerIxes.map((i) => (
+                {inSeatOrder.map((i) => (
                   <PlayerButton
                     key={i}
                     wind={nextWind(bottomWind, i, isSanma)}
-                    selected={nagashiPlayers.has(i)}
+                    selected={tenpaiPlayers.has(i)}
+                    forced={game.riichi[i]}
                     onClick={() => {
-                      updateNagashiPlayers((s) => {
+                      if (isDealer(i)) {
+                        setDrawRepeat(!tenpaiPlayers.has(i));
+                      }
+                      updateTenpaiPlayers((s) => {
                         if (s.has(i)) {
                           s.delete(i);
                         } else {
@@ -216,23 +243,41 @@ export function DrawDialog({
                 ))}
               </HorizontalRow>
               {/* As a win, the round repeats on the dealer's mangan rather than on tenpai. */}
-              {!nagashiWins && (
+              <ToggleOnOff
+                forced={nagashiWins}
+                toggled={
+                  nagashiWins
+                    ? playerIxes.some(
+                        (i) => nagashiPlayers.has(i) && isDealer(i),
+                      )
+                    : drawRepeat
+                }
+                onToggle={(b) => setDrawRepeat(b)}
+              >
+                {t("compass.repeatRound")}
+              </ToggleOnOff>
+              <ToggleOnOff
+                toggled={nagashi}
+                onToggle={(b) => {
+                  setNagashi(b);
+                  updateNagashiPlayers((s) => s.clear());
+                }}
+              >
+                {t("yaku.other.nagashimangan.$")}
+              </ToggleOnOff>
+              {nagashi && (
                 <>
                   <p className="text-xl lg:text-2xl">
-                    {t("compass.readyPlayers")}
+                    {t("compass.nagashiPlayers")}
                   </p>
                   <HorizontalRow>
-                    {playerIxes.map((i) => (
+                    {inSeatOrder.map((i) => (
                       <PlayerButton
                         key={i}
                         wind={nextWind(bottomWind, i, isSanma)}
-                        selected={tenpaiPlayers.has(i)}
-                        forced={game.riichi[i]}
+                        selected={nagashiPlayers.has(i)}
                         onClick={() => {
-                          if (isDealer(i)) {
-                            setDrawRepeat(!tenpaiPlayers.has(i));
-                          }
-                          updateTenpaiPlayers((s) => {
+                          updateNagashiPlayers((s) => {
                             if (s.has(i)) {
                               s.delete(i);
                             } else {
@@ -243,12 +288,6 @@ export function DrawDialog({
                       />
                     ))}
                   </HorizontalRow>
-                  <ToggleOnOff
-                    toggled={drawRepeat}
-                    onToggle={(b) => setDrawRepeat(b)}
-                  >
-                    {t("compass.repeatRound")}
-                  </ToggleOnOff>
                 </>
               )}
             </>
@@ -278,7 +317,7 @@ export function DrawDialog({
                 {t("compass.playerInViolation")}
               </p>
               <HorizontalRow>
-                {playerIxes.map((i) => (
+                {inSeatOrder.map((i) => (
                   <PlayerButton
                     key={i}
                     wind={nextWind(bottomWind, i, isSanma)}
@@ -298,13 +337,20 @@ export function DrawDialog({
             </>
           )}
         </form>
-        <Button
-          onClick={() => {
-            void submitDraw();
-          }}
-        >
-          {t("common.submit")}
-        </Button>
+        <div className="flex flex-col items-center justify-center gap-y-2">
+          <Button
+            onClick={() => {
+              void submitDraw();
+            }}
+          >
+            {t("common.submit")}
+          </Button>
+          {attempted && error != null && (
+            <p ref={errorRef} className="text-base lg:text-xl">
+              <H.Red>{error}</H.Red>
+            </p>
+          )}
+        </div>
       </div>
     </CustomDialog>
   );

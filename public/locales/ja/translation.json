@@ -145,6 +145,11 @@
     "doubleRon": "ダブロン",
     "drawType": "流局の種類",
     "editScore": "点数を修正",
+    "error": {
+      "pickDealtIn": "放銃者を選んでください。",
+      "pickNagashi": "流し満貫の成立者を選んでください。",
+      "pickWinners": "和了者を{{winners}}人選んでください。"
+    },
     "exhaust": "荒牌平局",
     "fourRiichiPays": "リーチ未入力の人もリーチ棒を出します。",
     "gameIdDoesNotExist": "エラー: ゲーム {{id}} は存在しません。",

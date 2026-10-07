@@ -145,6 +145,11 @@
     "doubleRon": "더블론",
     "drawType": "유국 종류",
     "editScore": "점수 수정",
+    "error": {
+      "pickDealtIn": "방총한 사람을 골라 주세요.",
+      "pickNagashi": "유국만관한 사람을 골라 주세요.",
+      "pickWinners": "화료한 사람을 {{winners}}명 골라 주세요."
+    },
     "exhaust": "황패유국",
     "fourRiichiPays": "리치를 누르지 않은 사람도 리치봉을 냅니다.",
     "gameIdDoesNotExist": "오류: 게임 {{id}}이(가) 존재하지 않습니다.",
