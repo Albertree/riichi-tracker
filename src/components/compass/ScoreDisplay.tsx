@@ -71,7 +71,14 @@ export default function ScoreDisplay({
               : "bg-gray-50 enabled:hover:bg-gray-200 dark:bg-gray-500 dark:enabled:hover:bg-gray-600",
           )}
         >
-          <span className={clsx(vertical ? "[writing-mode:vertical-rl]" : "")}>
+          <span
+            className={clsx(
+              // Sideways, so the label faces the player it belongs to like the score does.
+              vertical
+                ? "[text-orientation:sideways] [writing-mode:vertical-rl]"
+                : "",
+            )}
+          >
             {t("compass.riichi")}
           </span>
         </button>
