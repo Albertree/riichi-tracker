@@ -2,8 +2,9 @@ import { useRef, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { useImmer } from "use-immer";
 
-import { type Game } from "../../data/interfaces";
+import { type AbortKind, type Game } from "../../data/interfaces";
 import { calculateScoreTable, nextWind } from "../../lib/hand";
+import { recordEvent } from "../../lib/history";
 import { replicate } from "../../lib/util";
 import { useDb } from "../../providers/DbProvider";
 import Button from "../Button";
@@ -15,14 +16,13 @@ import ToggleOnOff from "../ToggleOnOff";
 import ToggleThree from "../ToggleThree";
 import PlayerButton from "./PlayerButton";
 
-const abortKinds = [
+const abortKinds: AbortKind[] = [
   "nineTerminals",
   "fourWinds",
   "fourRiichi",
   "fourKans",
   "tripleRon",
-] as const;
-type AbortKind = (typeof abortKinds)[number];
+];
 
 export function DrawDialog({
   gameId,
@@ -134,21 +134,32 @@ export function DrawDialog({
         ? playerIxes.some((i) => nagashiPlayers.has(i) && isDealer(i))
         : drawRepeat &&
           playerIxes.some((i) => tenpaiPlayers.has(i) && isDealer(i));
-      await db.setGame(gameId, {
-        ...game,
-        bottomWind: repeat ? bottomWind : nextWind(bottomWind, -1, isSanma),
-        roundWind: repeat
-          ? roundWind
-          : round === roundCap
-            ? nextWind(roundWind, 1, isSanma)
-            : roundWind,
-        round: repeat ? round : round === roundCap ? 1 : round + 1,
-        // A mangan at draw that counts as a win clears the repeats like any other win.
-        repeats: nagashiWins && !repeat ? 0 : repeats + 1,
-        scores: scores_,
-        riichiSticks: riichiSticks_,
-        riichi: replicate(false, isSanma ? 3 : 4),
-      });
+      await db.setGame(
+        gameId,
+        recordEvent(
+          game,
+          {
+            ...game,
+            bottomWind: repeat ? bottomWind : nextWind(bottomWind, -1, isSanma),
+            roundWind: repeat
+              ? roundWind
+              : round === roundCap
+                ? nextWind(roundWind, 1, isSanma)
+                : roundWind,
+            round: repeat ? round : round === roundCap ? 1 : round + 1,
+            // A mangan at draw that counts as a win clears the repeats like any other win.
+            repeats: nagashiWins && !repeat ? 0 : repeats + 1,
+            scores: scores_,
+            riichiSticks: riichiSticks_,
+            riichi: replicate(false, isSanma ? 3 : 4),
+          },
+          {
+            t: "exhaust",
+            tenpai: [...tenpaiPlayers],
+            nagashi: [...nagashiPlayers],
+          },
+        ),
+      );
       onScoreUpdate(game.scores);
     } else if (drawType === 1) {
       const scores_ = game.scores.slice();
@@ -160,13 +171,20 @@ export function DrawDialog({
           riichiSticks_ += 1;
         }
       }
-      await db.setGame(gameId, {
-        ...game,
-        repeats: game.repeats + 1,
-        scores: scores_,
-        riichiSticks: riichiSticks_,
-        riichi: replicate(false, isSanma ? 3 : 4),
-      });
+      await db.setGame(
+        gameId,
+        recordEvent(
+          game,
+          {
+            ...game,
+            repeats: game.repeats + 1,
+            scores: scores_,
+            riichiSticks: riichiSticks_,
+            riichi: replicate(false, isSanma ? 3 : 4),
+          },
+          { t: "abort", kind: abortKind },
+        ),
+      );
       onScoreUpdate(game.scores);
     } else {
       const scores_ = game.scores.slice();
@@ -188,12 +206,20 @@ export function DrawDialog({
           scores_[i] += 1000;
         }
       }
-      await db.setGame(gameId, {
-        ...game,
-        scores: scores_,
-        riichi: replicate(false, isSanma ? 3 : 4),
-        riichiSticks: game.riichiSticks - game.riichi.filter((x) => x).length,
-      });
+      await db.setGame(
+        gameId,
+        recordEvent(
+          game,
+          {
+            ...game,
+            scores: scores_,
+            riichi: replicate(false, isSanma ? 3 : 4),
+            riichiSticks:
+              game.riichiSticks - game.riichi.filter((x) => x).length,
+          },
+          { t: "chombo", player: violationPlayer },
+        ),
+      );
       onScoreUpdate(game.scores);
     }
     onClose();

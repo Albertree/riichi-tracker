@@ -2,8 +2,10 @@ import { useRef, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { useNavigate } from "react-router-dom";
 
+import { type GameState } from "../../data/interfaces";
 import useLocalStorage from "../../hooks/useLocalStorage";
 import { type Wind } from "../../lib/hand";
+import { startHistory } from "../../lib/history";
 import { DefaultSettings } from "../../lib/settings";
 import { type CompassState } from "../../lib/states";
 import { replicate } from "../../lib/util";
@@ -30,7 +32,7 @@ export function NewCompassDialog({ onClose }: { onClose: () => void }) {
   const [prefersQuick, setPrefersQuick] = useLocalStorage("prefersQuick");
 
   const submitNewCompass = async () => {
-    await db.setGame("$tools", {
+    const start: GameState = {
       bottomWind: newCompassBottomWind,
       roundWind: "1",
       round: 1,
@@ -41,6 +43,10 @@ export function NewCompassDialog({ onClose }: { onClose: () => void }) {
       ),
       riichiSticks: 0,
       riichi: replicate(false, newCompassSettings.sanma ? 3 : 4),
+    };
+    await db.setGame("$tools", {
+      ...start,
+      ...startHistory(start),
       settings: newCompassSettings,
     });
     const state: CompassState = { t: "load", id: "$tools" };

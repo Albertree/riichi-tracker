@@ -1,13 +1,16 @@
 import Dexie, { type Table } from "dexie";
 import { useLiveQuery } from "dexie-react-hooks";
 
+import { startHistory } from "../../lib/history";
 import { none, type Option, some } from "../../lib/option";
 import { DefaultSettings, type ScoreSettings } from "../../lib/settings";
 import { type Game, type IRepository, type PartialGame } from "../interfaces";
 
-type Game_ = Game & {
-  id: string;
-};
+// Games saved before the history existed do not have one.
+type Game_ = Omit<Game, "history" | "historyIndex"> &
+  Partial<Pick<Game, "history" | "historyIndex">> & {
+    id: string;
+  };
 
 function toGame(game: Game_): Game {
   return {
@@ -19,6 +22,9 @@ function toGame(game: Game_): Game {
     riichiSticks: game.riichiSticks,
     riichi: game.riichi,
     settings: game.settings,
+    ...(game.history != null && game.historyIndex != null
+      ? { history: game.history, historyIndex: game.historyIndex }
+      : startHistory(game)),
   };
 }
 
@@ -33,6 +39,8 @@ function fromGame(id: string, game: Game): Game_ {
     riichiSticks: game.riichiSticks,
     riichi: game.riichi,
     settings: game.settings,
+    history: game.history,
+    historyIndex: game.historyIndex,
   };
 }
 

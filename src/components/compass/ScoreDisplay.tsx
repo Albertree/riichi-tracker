@@ -1,5 +1,5 @@
 import clsx from "clsx";
-import { useEffect, useRef, useState } from "react";
+import { useRef, useState } from "react";
 import { useTranslation } from "react-i18next";
 
 import { type Wind } from "../../lib/hand";
@@ -30,13 +30,15 @@ export default function ScoreDisplay({
   playerLabel?: string;
 }) {
   const { t } = useTranslation();
+  // The change on show: where the score rolls from, and a count to restart the effects.
+  // After mounting, every change to the score is picked up here, whatever caused it.
+  const [change, setChange] = useState({ from: oldScore, to: score, n: 0 });
   const [animDone, setAnimDone] = useState(false);
-  useEffect(() => {
-    if (oldScore !== score) {
-      // eslint-disable-next-line react-hooks/set-state-in-effect
-      setAnimDone(false);
-    }
-  }, [score, oldScore]);
+  if (change.to !== score) {
+    setChange({ from: change.to, to: score, n: change.n + 1 });
+    setAnimDone(false);
+  }
+  const delta = score - change.from;
   const dices = isSanma
     ? [
         [1, 4, 7, 10],
@@ -93,9 +95,26 @@ export default function ScoreDisplay({
           vertical
             ? "flex h-full w-fit flex-col p-1.5 lg:px-4 lg:py-2"
             : "flex h-fit w-full flex-row p-1.5 lg:px-2 lg:py-4",
-          "items-center justify-between rounded-xl bg-slate-300 shadow dark:bg-sky-900",
+          "relative items-center justify-between rounded-xl bg-slate-300 shadow dark:bg-sky-900",
         )}
       >
+        {delta !== 0 && (
+          <span
+            key={change.n}
+            className={clsx(
+              "pointer-events-none absolute animate-score-delta rounded-full bg-slate-50 px-2 py-0.5 text-sm font-bold shadow lg:text-xl dark:bg-gray-800",
+              delta > 0
+                ? "text-green-600 dark:text-green-500"
+                : "text-red-600 dark:text-red-500",
+              // On the edge facing the centre, which is up for the player it belongs to.
+              vertical
+                ? "top-1/2 -right-3 -translate-y-1/2 px-0.5 py-2 [text-orientation:sideways] [writing-mode:vertical-rl]"
+                : "-top-3 left-1/2 -translate-x-1/2",
+            )}
+          >
+            {delta > 0 ? `+${delta}` : delta}
+          </span>
+        )}
         <span
           className={clsx(
             isSanma
@@ -124,12 +143,13 @@ export default function ScoreDisplay({
           onClick={onScoreClick}
         >
           <span className={clsx(vertical ? "[writing-mode:vertical-rl]" : "")}>
-            {animDone || oldScore === score ? (
+            {animDone || delta === 0 ? (
               <H>{score}</H>
-            ) : oldScore > score ? (
+            ) : delta < 0 ? (
               <H.Red>
                 <AnimatedIncrement
-                  start={oldScore / 100}
+                  key={change.n}
+                  start={change.from / 100}
                   end={score / 100}
                   map={(x) => x * 100}
                   duration={1000}
@@ -139,7 +159,8 @@ export default function ScoreDisplay({
             ) : (
               <H>
                 <AnimatedIncrement
-                  start={oldScore / 100}
+                  key={change.n}
+                  start={change.from / 100}
                   end={score / 100}
                   map={(x) => x * 100}
                   duration={1000}

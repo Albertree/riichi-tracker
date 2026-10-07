@@ -1,3 +1,4 @@
+import { useState } from "react";
 import { useTranslation } from "react-i18next";
 
 import { type Game } from "../../data/interfaces";
@@ -6,6 +7,7 @@ import { useDb } from "../../providers/DbProvider";
 import Button from "../Button";
 import Counter from "../Counter";
 import CustomDialog from "../layout/CustomDialog";
+import { HistoryDialog } from "./HistoryDialog";
 
 export function AdvancedDialog({
   gameId,
@@ -32,10 +34,22 @@ export function AdvancedDialog({
   const isSanma = settings.sanma != null;
   const roundCap = isSanma ? 3 : 4;
 
+  const [openHistory, setOpenHistory] = useState(false);
+
   return (
     <CustomDialog title={t("compass.otherActions")} onClose={onClose}>
       <div className="flex flex-col items-center justify-center gap-y-2">
         <div className="flex flex-col items-center justify-center gap-y-2">
+          <Button onClick={() => setOpenHistory(true)}>
+            {t("compass.history.$")}
+          </Button>
+          {openHistory && (
+            <HistoryDialog
+              gameId={gameId}
+              game={game}
+              onClose={() => setOpenHistory(false)}
+            />
+          )}
           <Button
             onClick={async () => {
               await db.setGame(gameId, {

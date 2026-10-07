@@ -6,3 +6,21 @@ html:has([data-compass]),
 html:has([data-compass]) body {
   overscroll-behavior: none;
 }
+
+@theme {
+  /* The points gained or lost, shown over a score for a moment after it changes. */
+  --animate-score-delta: score-delta 2.5s ease-out forwards;
+
+  @keyframes score-delta {
+    0% {
+      opacity: 0;
+    }
+    10%,
+    75% {
+      opacity: 1;
+    }
+    100% {
+      opacity: 0;
+    }
+  }
+}

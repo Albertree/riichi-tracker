@@ -32,7 +32,7 @@ import { HTrans } from "../components/text/Localized";
 import Tiles from "../components/Tiles";
 import Toggle from "../components/Toggle";
 import ToggleOnOff from "../components/ToggleOnOff";
-import { type Game } from "../data/interfaces";
+import { type Game, type GameEvent } from "../data/interfaces";
 import useLocalStorage from "../hooks/useLocalStorage";
 import { type Action, defaultAction } from "../lib/action";
 import {
@@ -47,6 +47,7 @@ import {
   sortTiles,
   type TileCode,
 } from "../lib/hand";
+import { recordEvent } from "../lib/history";
 import { type ScoreSettings } from "../lib/settings";
 import { type CalculatorState, type CompassState } from "../lib/states";
 import { replicate } from "../lib/util";
@@ -499,6 +500,7 @@ function CalculatorWithGame({
     const isOya = locState.seatWind === "1";
 
     const scores_ = scores.slice(0);
+    let event: GameEvent;
 
     // This is technically exhaustive, TS just can't recognize the two values are the same.
     if (locState.agari === "ron" && calcPoints.agari === "ron") {
@@ -519,6 +521,7 @@ function CalculatorWithGame({
         return;
       }
 
+      event = { t: "ron", wins: rons, dealtIn: locState.dealtInPlayer };
       // The riichi sticks all go to the winner closest to the dealt-in player, who was calculated first.
       if (locState.scoreRiichiSticks) {
         scores_[rons[0].winner] += 1000 * riichiSticks;
@@ -539,6 +542,11 @@ function CalculatorWithGame({
         }
       }
     } else if (locState.agari === "tsumo" && calcPoints.agari === "tsumo") {
+      event = {
+        t: "tsumo",
+        winner: locState.winner,
+        points: calcPoints.points.total,
+      };
       scores_[locState.winner] += calcPoints.points.total;
       if (locState.scoreRiichiSticks) {
         scores_[locState.winner] += 1000 * riichiSticks;
@@ -565,32 +573,45 @@ function CalculatorWithGame({
           scores_[locState.pao] -= repeats * honba;
         }
       }
+    } else {
+      return;
     }
 
     const shouldRotate = locState.handleRotation;
     const shouldRepeat = locState.dealerRepeat;
-    await db.setGame(locState.id, {
-      ...game,
-      ...(shouldRotate || shouldRepeat
-        ? {
-            bottomWind: shouldRepeat
-              ? bottomWind
-              : nextWind(bottomWind, -1, isSanma),
-            roundWind: shouldRepeat
-              ? roundWind
-              : round === roundCap
-                ? nextWind(roundWind, 1, isSanma)
-                : roundWind,
-            round: shouldRepeat ? round : round === roundCap ? 1 : round + 1,
-            repeats: shouldRepeat ? repeats + 1 : 0,
-          }
-        : {}),
-      scores: scores_,
-      riichiSticks: locState.scoreRiichiSticks ? 0 : riichiSticks,
-      riichi: locState.scoreRiichiSticks
-        ? replicate(false, isSanma ? 3 : 4)
-        : riichi,
-    });
+    await db.setGame(
+      locState.id,
+      recordEvent(
+        game,
+        {
+          ...game,
+          ...(shouldRotate || shouldRepeat
+            ? {
+                bottomWind: shouldRepeat
+                  ? bottomWind
+                  : nextWind(bottomWind, -1, isSanma),
+                roundWind: shouldRepeat
+                  ? roundWind
+                  : round === roundCap
+                    ? nextWind(roundWind, 1, isSanma)
+                    : roundWind,
+                round: shouldRepeat
+                  ? round
+                  : round === roundCap
+                    ? 1
+                    : round + 1,
+                repeats: shouldRepeat ? repeats + 1 : 0,
+              }
+            : {}),
+          scores: scores_,
+          riichiSticks: locState.scoreRiichiSticks ? 0 : riichiSticks,
+          riichi: locState.scoreRiichiSticks
+            ? replicate(false, isSanma ? 3 : 4)
+            : riichi,
+        },
+        event,
+      ),
+    );
 
     const state: CompassState = {
       t: "load",
